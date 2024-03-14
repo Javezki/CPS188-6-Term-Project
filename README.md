@@ -1,1 +1,1 @@
-# CPS188-6-Term-Project
+# CPS188-Term-Project
