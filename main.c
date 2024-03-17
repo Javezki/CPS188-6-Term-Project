@@ -206,6 +206,7 @@ void q3() {
 
 
 int main(void) {
+    // Some updates here and there lololollolol
     // Call function to get data count
     setValuesFromFile();
     // Calculate the yearly averages
