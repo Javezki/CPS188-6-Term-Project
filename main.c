@@ -199,6 +199,10 @@ void q1() {
     }
 }
 
+void q3() {
+    printf("Whatever q3 is ");
+}
+
 
 
 int main(void) {
