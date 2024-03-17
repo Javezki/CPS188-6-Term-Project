@@ -201,6 +201,8 @@ void q1() {
 
 void q3() {
     printf("Whatever q3 is ");
+    // A little bit of trolling lmao
+    //adadadadadad
 }
 
 
