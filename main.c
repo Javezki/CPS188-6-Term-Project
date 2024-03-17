@@ -126,7 +126,7 @@ void setValuesFromFile()
     printf("Data count: %d\n", counter);
 }
 
-/**
+/** 
  * Function to print the arrays
  * TESTING PURPOSES COMMENT OUT ON PRODUCTION
  */
@@ -179,54 +179,36 @@ int getArrPosition(char *date)
 }
 
 /**
- * Based on the land average temperature column, calculate the average land
- * temperature for the different centuries: 18th century (1760-1799), 19th century
- *(1800-1899), 20th century (1900-1999) and 21st century (2000-2015). One
- *average per century.
- *
+ * Calculates the yearly averages of the latitudes.
+ * The function iterates over each year and calculates the average latitude for that year.
+ * The average latitude is calculated by summing up the latitudes for each month in the year and dividing by 12.
+ * The calculated yearly averages are stored in the `yearlyAverages` array.
  */
-void q2()
-{
-    double avg_temp_18th, avg_temp_19th, avg_temp_20th, avg_temp_21th;
-
-    // 18th century (1760-1799)
-    for (int i = 120; i < 599; i++)
-    {
-        avg_temp_18th += lat[i];
+void calcYearlyAverages() {
+    for (int i = 0; i < NUM_YEARS; i++) {
+        double sum = 0;
+        for (int j = 0; j < 12; j++) {
+            sum += lat[i * 12 + j];
+        }
+        yearlyAverages[i] = sum / 12;
     }
-    // Print the average land temperature for the 18th century
-    printf("18th century average land temperature: %f\n", avg_temp_18th / 480);
-
-    // 19th century (1800-1899)
-    for (int i = 600; i < 1799; i++)
-    {
-        avg_temp_19th += lat[i];
-    }
-    // Print the average land temperature for the 19th century
-    printf("18th century average land temperature: %f\n", avg_temp_19th / 1200);
-
-    // 20th century (1900-1999)
-    for (int i = 1800; i < 2999; i++)
-    {
-        avg_temp_20th += lat[i];
-    }
-    // Print the average land temperature for the 20th century
-    printf("18th century average land temperature: %f\n", avg_temp_20th / 1200);
-
-    // 21st century (2000-2015)
-    for (int i = 3000; i < 3191; i++)
-    {
-        avg_temp_21th += lat[i];
-    }
-    // Print the average land temperature for the 21th century
-    printf("18th century average land temperature: %f\n", avg_temp_21th / 191);
 }
 
-int main(void)
-{
+/**
+ * Based on the land average temperature column, calculate the yearly averages for each year 
+ * between 1760 and 2015 (the average of the twelve months of each year). 
+ * One average per year. Ignore the years 1750-1759.
+*/
+void q1() {
+    
+}
+
+
+
+int main(void) {
     // Call function to get data count
     setValuesFromFile();
-    q2();
-
+    calcYearlyAverages();
+    printf("The position in the array: %d %d", getArrPosition("2015-01-01"), getArrPosition("1750-01-01"));
     return 0;
 }
