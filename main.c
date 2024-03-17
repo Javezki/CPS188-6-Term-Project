@@ -3,7 +3,8 @@
 #include <string.h>
 
 #define DATE_SIZE 11
-#define DATA_COUNT 3193
+#define DATA_COUNT 3192
+#define NUM_YEARS 265 // 2015 - 1750
 
 
 // Accont's for header and skips over it
@@ -27,10 +28,8 @@ double lmitu[DATA_COUNT];
 double loat[DATA_COUNT];
 // Land and Ocean Average Temperature Uncertainty
 double loatu[DATA_COUNT];
-// Ocean Average Temperature
-double oat[DATA_COUNT];
-// Ocean Average Temperature Uncertainty
-double oatu[DATA_COUNT];
+
+double yearlyAverages[NUM_YEARS];
 
 /**
  * Function to get the count of data entries in a file.
@@ -98,14 +97,6 @@ void setValuesFromFile() {
                     // Convert the string to a double and assign it to loatu array
                     loatu[counter] = atof(token);
                     break;
-                case 9:
-                    // Convert the string to a double and assign it to oat array
-                    oat[counter] = atof(token);
-                    break;
-                case 10:
-                    // Convert the string to a double and assign it to oatu array
-                    oatu[counter] = atof(token);
-                    break;
                 default:
                     break;
             }
@@ -137,8 +128,6 @@ void printArrays() {
         printf("Land Min Temperature Uncertainty: %f\n", lmitu[i]);
         printf("Land and Ocean Average Temperature: %f\n", loat[i]);
         printf("Land and Ocean Average Temperature Uncertainty: %f\n", loatu[i]);
-        printf("Ocean Average Temperature: %f\n", oat[i]);
-        printf("Ocean Average Temperature Uncertainty: %f\n", oatu[i]);
     }
 }
 
@@ -146,7 +135,7 @@ void printArrays() {
  * Retrieves the position of an array based on a given date string.
  *
  * @param date The date string in the format "YYYY-MM-DD".
- * @return The position of the array.
+ * @return The position in the array.
  */
 int getArrPosition(char* date) {
     int token = strtok(date, "-"), year, month, day, index;
@@ -172,9 +161,36 @@ int getArrPosition(char* date) {
 
 }
 
+/**
+ * Calculates the yearly averages of the latitudes.
+ * The function iterates over each year and calculates the average latitude for that year.
+ * The average latitude is calculated by summing up the latitudes for each month in the year and dividing by 12.
+ * The calculated yearly averages are stored in the `yearlyAverages` array.
+ */
+void calcYearlyAverages() {
+    for (int i = 0; i < NUM_YEARS; i++) {
+        double sum = 0;
+        for (int j = 0; j < 12; j++) {
+            sum += lat[i * 12 + j];
+        }
+        yearlyAverages[i] = sum / 12;
+    }
+}
+
+/**
+ * Based on the land average temperature column, calculate the yearly averages for each year 
+ * between 1760 and 2015 (the average of the twelve months of each year). 
+ * One average per year. Ignore the years 1750-1759.
+*/
+void q1() {
+    
+}
+
+
+
 int main(void) {
     // Call function to get data count
     setValuesFromFile();
-    printArrays();
+    calcYearlyAverages();
     return 0;
 }
