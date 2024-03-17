@@ -3,7 +3,8 @@
 #include <string.h>
 
 #define DATE_SIZE 11
-#define DATA_COUNT 3193
+#define DATA_COUNT 3192
+#define NUM_YEARS 265 // 2015 - 1750
 
 // Accont's for header and skips over it
 int counter = -1;
@@ -26,10 +27,8 @@ double lmitu[DATA_COUNT];
 double loat[DATA_COUNT];
 // Land and Ocean Average Temperature Uncertainty
 double loatu[DATA_COUNT];
-// Ocean Average Temperature
-double oat[DATA_COUNT];
-// Ocean Average Temperature Uncertainty
-double oatu[DATA_COUNT];
+
+double yearlyAverages[NUM_YEARS];
 
 /**
  * Function to get the count of data entries in a file.
@@ -144,16 +143,14 @@ void printArrays()
         printf("Land Min Temperature Uncertainty: %f\n", lmitu[i]);
         printf("Land and Ocean Average Temperature: %f\n", loat[i]);
         printf("Land and Ocean Average Temperature Uncertainty: %f\n", loatu[i]);
-        printf("Ocean Average Temperature: %f\n", oat[i]);
-        printf("Ocean Average Temperature Uncertainty: %f\n", oatu[i]);
     }
 }
 
 /**
  * Retrieves the position of an array based on a given date string.
  *
- * @param date The date string in the format "YYYY-MM-DD".
- * @return The position of the array.
+ * @param date The date string in the format "YYYY-MM-DD".`
+ * @return The position in the array.
  */
 int getArrPosition(char *date)
 {
