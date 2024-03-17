@@ -134,31 +134,16 @@ void printArrays() {
 /**
  * Retrieves the position of an array based on a given date string.
  *
- * @param date The date string in the format "YYYY-MM-DD".
+ * @param date The date string in the format "YYYY-MM-DD".`
  * @return The position in the array.
  */
 int getArrPosition(char* date) {
-    int token = strtok(date, "-"), year, month, day, index;
-    while (token != NULL) {
-        switch (index) {
-            case 0:
-                year = atoi(token);
-                break;
-            case 1:
-                month = atoi(token);
-                break;
-            case 2:
-                day = atoi(token);
-                break;
-            default:
-                break;
-        }
-        token = strtok(NULL, "-");
-        index++;
+    int year, month, day;
+    if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3) {
+        printf("Error: Invalid date format\n");
+        exit(1);
     }
-
-    return (year - 1750) * 12 + month;
-
+    return (year - 1750) * 12 + month - 1;
 }
 
 /**
@@ -192,5 +177,6 @@ int main(void) {
     // Call function to get data count
     setValuesFromFile();
     calcYearlyAverages();
+    printf("The position in the array: %d %d", getArrPosition("2015-01-01"), getArrPosition("1750-01-01"));
     return 0;
 }
