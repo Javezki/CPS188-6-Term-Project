@@ -113,6 +113,30 @@ void setValuesFromFile() {
     printf("Data count: %d\n", counter);
 }
 
+/**
+ * This function uses fscanf to sort the values
+ * Probably need to format the date using ints and storing the values overall is gonna be a huge hassle
+ * but I can try getting this to work sometime later
+*/
+void setValuesFromFile2() {
+    FILE *file;
+    file = fopen("GlobalTemperatures.csv", "r");
+    if (file == NULL ) {
+        perror("Failed to open file");
+        return;
+    }
+    
+    while(fscanf(file, "%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf", dt[counter], &lat[counter], &latu[counter], &lmt[counter], &lmtu[counter], &lmit[counter], &lmitu[counter], &loat[counter], &loatu[counter]) != EOF) {
+        // Skip header
+        if (counter == -1) {
+            counter++;
+            continue;
+        }
+        dt[counter][DATE_SIZE - 1] = '\0'; // Null terminate the string
+        counter++;
+    }
+    fclose(file);
+}
 /** 
  * Function to print the arrays
  * TESTING PURPOSES COMMENT OUT ON PRODUCTION
@@ -153,12 +177,13 @@ int getArrPosition(char* date) {
  * The calculated yearly averages are stored in the `yearlyAverages` array.
  */
 void calcYearlyAverages() {
-    for (int i = 0; i < NUM_YEARS; i++) {
-        double sum = 0;
+    double sum = 0;
+    for (int i = 0; i <= NUM_YEARS; i++) {
         for (int j = 0; j < 12; j++) {
             sum += lat[i * 12 + j];
         }
         yearlyAverages[i] = sum / 12;
+        sum = 0;
     }
 }
 
@@ -168,7 +193,10 @@ void calcYearlyAverages() {
  * One average per year. Ignore the years 1750-1759.
 */
 void q1() {
-    
+    // 10 is the year 1760
+    for (int i = 10; i <= NUM_YEARS; i++) {
+        printf("Year: %d, Average: %f\n", i + 1750, yearlyAverages[i]);
+    }
 }
 
 
@@ -176,7 +204,8 @@ void q1() {
 int main(void) {
     // Call function to get data count
     setValuesFromFile();
+    // Calculate the yearly averages
     calcYearlyAverages();
-    printf("The position in the array: %d %d", getArrPosition("2015-01-01"), getArrPosition("1750-01-01"));
+    q1();
     return 0;
 }
