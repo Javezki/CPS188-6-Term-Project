@@ -229,6 +229,7 @@ int main(void)
 {
     // Call function to get data count
     setValuesFromFile();
+    q2();
 
     return 0;
 }
