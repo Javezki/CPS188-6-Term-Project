@@ -216,7 +216,13 @@ void q1()
         printf("Year: %d, Average: %f\n", i + 1750, yearlyAverages[i]);
     }
 }
-
+/**
+ * Based on the land average temperature column, calculate the average land
+ * temperature for the different centuries: 18th century (1760-1799), 19th century
+ * (1800-1899), 20th century (1900-1999) and 21st century (2000-2015). One
+ * average per century.ss
+ *
+ */
 void q2()
 {
     double avg_temp_18th, avg_temp_19th, avg_temp_20th, avg_temp_21th;
