@@ -222,7 +222,7 @@ void q2()
     double avg_temp_18th, avg_temp_19th, avg_temp_20th, avg_temp_21th;
 
     // 18th century (1760-1799)
-    for (int i = 120; i < 599; i++)
+    for (int i = getArrPosition("1760-01-01"); i < getArrPosition("1799-12-01"); i++)
     {
         avg_temp_18th += lat[i];
     }
@@ -230,7 +230,7 @@ void q2()
     printf("18th century average land temperature: %f\n", avg_temp_18th / 480);
 
     // 19th century (1800-1899)
-    for (int i = 600; i < 1799; i++)
+    for (int i = getArrPosition("1800-01-01"); i < getArrPosition("1899-12-01"); i++)
     {
         avg_temp_19th += lat[i];
     }
@@ -238,7 +238,7 @@ void q2()
     printf("18th century average land temperature: %f\n", avg_temp_19th / 1200);
 
     // 20th century (1900-1999)
-    for (int i = 1800; i < 2999; i++)
+    for (int i = getArrPosition("1900-01-01"); i < getArrPosition("1999-12-01"); i++)
     {
         avg_temp_20th += lat[i];
     }
@@ -246,7 +246,7 @@ void q2()
     printf("18th century average land temperature: %f\n", avg_temp_20th / 1200);
 
     // 21st century (2000-2015)
-    for (int i = 3000; i < 3191; i++)
+    for (int i = getArrPosition("2000-01-01"); i < getArrPosition("2015-12-01"); i++)
     {
         avg_temp_21th += lat[i];
     }
