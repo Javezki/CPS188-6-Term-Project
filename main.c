@@ -214,6 +214,7 @@ int getYearlyArrPosition(int year)
  */
 void calcYearlyAverages(double *values, double *yearlyAverages)
 {
+    // FILE* debugFile = fopen("debug.txt", "a");
     double sum = 0;
     for (int i = 0; i <= NUM_YEARS; i++)
     {
@@ -222,9 +223,10 @@ void calcYearlyAverages(double *values, double *yearlyAverages)
             sum += values[i * 12 + j];
         }
         yearlyAverages[i] = sum / 12;
-        printf("Year: %d, Average: %f\n", i + 1750, yearlyAverages[i]);
+        // fprintf(debugFile, "Year: %d, Average: %f\n", i + 1750, yearlyAverages[i]);
         sum = 0;
     }
+    // fclose(debugFile);
 }
 /**
  * Computes the yearly average for different variables.
@@ -478,7 +480,7 @@ void q7()
 
 void q8()
 {
-    int numYears = 2015 - 1850;
+    int numYears = 2015 - 1850 + 1;
     int xvalues[numYears];
     double adjustedLatYearlyAverage[numYears];
     double adjustedLmtYearlyAverage[numYears];
@@ -501,6 +503,7 @@ void q8()
 
 int main(void)
 {
+    // remove("debug.txt");
     // Some updates here and there lololollolol
     // Call function to get data count
     setValuesFromFile();
@@ -514,7 +517,7 @@ int main(void)
     q6();
     q7();
     q8();
-    int arrPos = getYearlyArrPosition(1850);
-    printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", lat[arrPos], lmt[arrPos], lmit[arrPos]);
+    // int arrPos = getYearlyArrPosition(1850);
+    // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
 }
