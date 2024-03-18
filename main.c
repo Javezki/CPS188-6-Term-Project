@@ -11,31 +11,42 @@ int counter = -1;
 
 // Date
 char dt[DATA_COUNT][DATE_SIZE];
+
 // Land Average Temperature
 double lat[DATA_COUNT];
+
 // Land Average Temperature Uncertainty
 double latu[DATA_COUNT];
+
 // Land Max Temperature
 double lmt[DATA_COUNT];
+
 // Land Max Temperature Uncertainty
 double lmtu[DATA_COUNT];
+
 // Land Min Temperature
 double lmit[DATA_COUNT];
+
 // Land Min Temperature Uncertainty
 double lmitu[DATA_COUNT];
+
 // Land and Ocean Average Temperature
 double loat[DATA_COUNT];
+
 // Land and Ocean Average Temperature Uncertainty
 double loatu[DATA_COUNT];
+
 // Land Average Temperature Yearly Averages
 double latYearlyAverage[NUM_YEARS];
+
 // Land Max Temperature Yearly Averages
 double lmtYearlyAverage[NUM_YEARS];
+
 // Land Min Temperature Yearly Averages
 double lmitYearlyAverage[NUM_YEARS];
+
 // Land and Ocean Average Temperature Yearly Averages
 double loatYearlyAverage[NUM_YEARS];
-
 
 /**
  * Function to get the count of data entries in a file.
@@ -190,7 +201,8 @@ int getArrPosition(char *date)
     return (year - 1750) * 12 + month - 1;
 }
 
-int getYearlyArrPosition(int year) {
+int getYearlyArrPosition(int year)
+{
     return year - 1750;
 }
 
@@ -213,8 +225,12 @@ void calcYearlyAverages(double *values, double *yearlyAverages)
         sum = 0;
     }
 }
-
-void computeYearlyAverage() {
+/**
+ * Computes the yearly average for different variables.
+ * Calls the `calcYearlyAverages` function for each variable.
+ */
+void computeYearlyAverage()
+{
     calcYearlyAverages(lat, latYearlyAverage);
     calcYearlyAverages(lmt, lmtYearlyAverage);
     calcYearlyAverages(lmit, lmitYearlyAverage);
@@ -230,22 +246,24 @@ void computeYearlyAverage() {
  * @param fileName The name of the file to write the data to.
  * @param isAppended A flag indicating whether to append to an existing file (1) or create a new file (0).
  */
-void writeGNUPlot(int* xvalues, double* yvalues, char* xName, char* yName, int size, char* fileName, int isAppended) {
+void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int size, char *fileName, int isAppended)
+{
     FILE *file;
     printf("Testing xValues 0 %d\n", xvalues[0]);
     printf("Testing yValues 0 %lf\n", yvalues[0]);
     printf("Testing xValues 1 %d\n", xvalues[1]);
     printf("Testing yValues 1 %lf\n", yvalues[1]);
-    switch (isAppended) {
-        case 0:
-            file = fopen(fileName, "w");
-            break;
-        case 1:
-            file = fopen(fileName, "a");
-            break;
-        default:
-            perror("Invalid file mode");
-            return;
+    switch (isAppended)
+    {
+    case 0:
+        file = fopen(fileName, "w");
+        break;
+    case 1:
+        file = fopen(fileName, "a");
+        break;
+    default:
+        perror("Invalid file mode");
+        return;
     }
     fprintf(file, "# %s vs %s\n", xName, yName);
     if (file == NULL)
@@ -431,20 +449,24 @@ void q5()
     printf("Coldest year: %d, Temperature: %f\n", coldestYearPos + 1750, coldestYear);
 }
 
-void q6() {
+void q6()
+{
     int xvalues[NUM_YEARS];
-    for (int i = 10; i <= NUM_YEARS; i++) {
+    for (int i = 10; i <= NUM_YEARS; i++)
+    {
         xvalues[i - 10] = i + 1750;
     }
     // Subtract 10 to avoid the last 10 years after 2015
-    writeGNUPlot(xvalues, latYearlyAverage, "Years 1760 - 2015", "Temperatures" ,NUM_YEARS - 9, "Question-6.dat", 0);
+    writeGNUPlot(xvalues, latYearlyAverage, "Years 1760 - 2015", "Temperatures", NUM_YEARS - 9, "Question-6.dat", 0);
 }
 
-void q7() {
+void q7()
+{
     int xvalues[101];
     double yvalues[101];
     double yvalues2[101];
-    for (int i = 0; i <= 100; i++) {
+    for (int i = 0; i <= 100; i++)
+    {
         xvalues[i] = i;
         yvalues[i] = latYearlyAverage[getYearlyArrPosition(1800 + i)];
         yvalues2[i] = latYearlyAverage[getYearlyArrPosition(1900 + i)];
@@ -453,8 +475,23 @@ void q7() {
     writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 101, "Question-7-1900.dat", 1);
 }
 
-void q8() {
-
+void q8()
+{
+    int numYears = 2015 - 1850;
+    int xvalues[numYears];
+    double adjustedLatYearlyAverage[numYears];
+    double adjustedLmtYearlyAverage[numYears];
+    double adjustedLmitYearlyAverage[numYears];
+    for (int i = 1850; i <= 2015; i++)
+    {
+        xvalues[i - 1850] = i;
+        adjustedLatYearlyAverage[i - 1850] = latYearlyAverage[getYearlyArrPosition(i)] - latYearlyAverage[getYearlyArrPosition(1850)];
+        adjustedLmtYearlyAverage[i - 1850] = lmtYearlyAverage[getYearlyArrPosition(i)] - lmtYearlyAverage[getYearlyArrPosition(1850)];
+        adjustedLmitYearlyAverage[i - 1850] = lmitYearlyAverage[getYearlyArrPosition(i)] - lmitYearlyAverage[getYearlyArrPosition(1850)];
+    }
+    writeGNUPlot(xvalues, adjustedLatYearlyAverage, "Years 1850 - 2015", "Avg Temperatures", numYears, "Question-8-lat.dat", 0);
+    writeGNUPlot(xvalues, adjustedLmtYearlyAverage, "Years 1850 - 2015", "Max Temperatures", numYears, "Question-8-lmt.dat", 1);
+    writeGNUPlot(xvalues, adjustedLmitYearlyAverage, "Years 1850 - 2015", "Min Temperatures", numYears, "Question-8-lmit.dat", 1);
 }
 
 int main(void)
