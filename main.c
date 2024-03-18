@@ -267,17 +267,22 @@ void q2()
  */
 void q3()
 {
+    // Declaring the variables sum and month
     double sum, month;
 
+    // This loop will go through the 12 months of the year (January, Febuary, ......)
     for (int i = 0; i < 12; i++)
     {
+        sum = 0;
 
-        for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01") + i; j += 12)
+        // This loops through the years between 1900 and 2015
+        for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01"); j += 12)
         {
 
             sum += lat[i];
         }
 
+        // This prints out the month average over the years of 1900 2015
         printf("This is the average from 1900 to 2015 for the month ");
 
         switch (i)
@@ -308,7 +313,7 @@ void q3()
             break;
         }
 
-        printf("%lf\n", sum / 116);
+        printf("%lf\n", (sum / 116));
     }
 }
 
@@ -347,7 +352,7 @@ void q5()
     int coldestYearPos = 0;
 
     // Use max and min double values to ensure the first
-    // value is always greater or less than the current value  
+    // value is always greater or less than the current value
     double hottestYear = __DBL_MIN__;
     double coldestYear = __DBL_MAX__;
     for (int i = 10; i <= NUM_YEARS; i++)
