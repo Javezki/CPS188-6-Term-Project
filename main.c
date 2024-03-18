@@ -203,6 +203,22 @@ void calcYearlyAverages()
     }
 }
 
+void writeGNUPlot(int* xvalues, double* yvalues, int size, char* fileName) {
+    FILE *file;
+    file = fopen(fileName, "w");
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+    for (int i = 0; i <= size; i++)
+    {
+        fprintf(file, "%d %lf\n", xvalues[i], yvalues[i]);
+    }
+    fclose(file);
+    printf("File written: %s\n", fileName);
+}
+
 /**
  * Based on the land average temperature column, calculate the yearly averages for each year
  * between 1760 and 2015 (the average of the twelve months of each year).
@@ -268,7 +284,7 @@ void q2()
 void q3()
 {
     // Declaring the variables sum and month
-    double sum, month;
+    double sum;
 
     // This loop will go through the 12 months of the year (January, Febuary, ......)
     for (int i = 0; i < 12; i++)
@@ -373,6 +389,15 @@ void q5()
     printf("Coldest year: %d, Temperature: %f\n", coldestYearPos + 1750, coldestYear);
 }
 
+void q6() {
+    int xvalues[NUM_YEARS];
+    for (int i = 10; i <= NUM_YEARS; i++) {
+        xvalues[i - 10] = i + 1750;
+    }
+    // Subtract 10 to avoid the last 10 years after 2015
+    writeGNUPlot(xvalues, yearlyAverages, NUM_YEARS - 10, "yearlyAverages.dat");
+}
+
 int main(void)
 {
     // Some updates here and there lololollolol
@@ -385,5 +410,6 @@ int main(void)
     q3();
     q4();
     q5();
+    q6();
     return 0;
 }
