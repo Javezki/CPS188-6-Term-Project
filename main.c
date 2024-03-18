@@ -183,6 +183,10 @@ int getArrPosition(char *date)
     return (year - 1750) * 12 + month - 1;
 }
 
+int getYearlyArrPosition(int year) {
+    return year - 1750;
+}
+
 /**
  * Calculates the yearly averages of the latitudes.
  * The function iterates over each year and calculates the average latitude for that year.
@@ -203,9 +207,33 @@ void calcYearlyAverages()
     }
 }
 
-void writeGNUPlot(int* xvalues, double* yvalues, int size, char* fileName) {
+/**
+ * Writes data to a file in GNUPlot format.
+ *
+ * @param xvalues An array of integers representing the x-values.
+ * @param yvalues An array of doubles representing the y-values.
+ * @param size The size of the arrays.
+ * @param fileName The name of the file to write the data to.
+ * @param isAppended A flag indicating whether to append to an existing file (1) or create a new file (0).
+ */
+void writeGNUPlot(int* xvalues, double* yvalues, char* xName, char* yName, int size, char* fileName, int isAppended) {
     FILE *file;
-    file = fopen(fileName, "w");
+    printf("Testing xValues 0 %d\n", xvalues[0]);
+    printf("Testing yValues 0 %lf\n", yvalues[0]);
+    printf("Testing xValues 1 %d\n", xvalues[1]);
+    printf("Testing yValues 1 %lf\n", yvalues[1]);
+    switch (isAppended) {
+        case 0:
+            file = fopen(fileName, "w");
+            break;
+        case 1:
+            file = fopen(fileName, "a");
+            break;
+        default:
+            perror("Invalid file mode");
+            return;
+    }
+    fprintf(file, "# %s vs %s\n", xName, yName);
     if (file == NULL)
     {
         perror("Failed to open file");
@@ -395,7 +423,27 @@ void q6() {
         xvalues[i - 10] = i + 1750;
     }
     // Subtract 10 to avoid the last 10 years after 2015
-    writeGNUPlot(xvalues, yearlyAverages, NUM_YEARS - 10, "yearlyAverages.dat");
+    writeGNUPlot(xvalues, yearlyAverages, "Years 1760 - 2015", "Temperatures" ,NUM_YEARS - 10, "yearlyAverages.dat", 0);
+}
+
+void q7() {
+    int xvalues[101];
+    double yvalues[101];
+    double yvalues2[101];
+    for (int i = 0; i <= 100; i++) {
+        printf("Testing i %d\n", i);
+        xvalues[i] = i;
+        printf("Testing xValues %d\n", xvalues[i]);
+        yvalues[i] = yearlyAverages[getYearlyArrPosition(1800 + i)];
+        yvalues2[i] = yearlyAverages[getYearlyArrPosition(1900 + i)];
+    }
+    printf("Testing xValues 0 %d\n", xvalues[0]);
+    printf("Testing yValues 0 %lf\n", yvalues[0]);
+    printf("Testing xValues 1 %d\n", xvalues[1]);
+    printf("Testing yValues 1 %lf\n", yvalues[1]);
+
+    writeGNUPlot(xvalues, yvalues, "1800-1900", "Temps", 100, "Question-7.dat", 0);
+    writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 100, "Question-7.dat", 1);
 }
 
 int main(void)
@@ -411,5 +459,6 @@ int main(void)
     q4();
     q5();
     q6();
+    q7();
     return 0;
 }
