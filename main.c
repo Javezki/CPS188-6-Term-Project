@@ -259,10 +259,27 @@ void q2()
     // Print the average land temperature for the 21th century
     printf("18th century average land temperature: %f\n", avg_temp_21th / 191);
 }
+
+/**
+ * Based on the land average temperature column, calculate the monthly averages
+ * for each month for all years combined between 1900 and 2015. A total of twelve
+ * averages. One average per month.
+ */
 void q3()
 {
-    printf("Whatever q3 is ");
-    printf("This is a test");
+    double sum;
+
+    for (int i = 0; i < 115; i++)
+    {
+
+        for (int i = getArrPosition("1900-01-01"); i < getArrPosition("2015-01-01"); i += 12)
+        {
+
+            sum += lat[i];
+        }
+
+        printf("For the month of January, the land average is: %lf", sum / 116);
+    }
 }
 
 int main(void)
@@ -272,7 +289,8 @@ int main(void)
     setValuesFromFile();
     // Calculate the yearly averages
     calcYearlyAverages();
-    q1();
-    q2();
+    // q1();
+    // q2();
+    q3();
     return 0;
 }
