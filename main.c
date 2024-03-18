@@ -262,6 +262,7 @@ void q2()
 void q3()
 {
     printf("Whatever q3 is ");
+    printf("This is a test");
 }
 
 int main(void)
