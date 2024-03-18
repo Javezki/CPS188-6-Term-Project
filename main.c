@@ -265,6 +265,35 @@ void q3()
     printf("This is a test");
 }
 
+void q4()
+{
+    int hottestMonthPos = 0;
+    int coldestMonthPos = 0;
+
+    // Use max and min double values to ensure the first
+    // value is always greater or less than the current value
+    double hottestMonth = __DBL_MIN__;
+    double coldestMonth = __DBL_MAX__;
+    for (int i = 0; i < DATA_COUNT; i++)
+    {
+        // Check if the current month's temperature is greater than the current hottest month
+        if (lmt[i] > hottestMonth)
+        {
+            hottestMonth = lmt[i];
+            hottestMonthPos = i;
+        }
+        // Check if the current month's temperature is less than the current coldest month
+        if (lmit[i] < coldestMonth)
+        {
+            coldestMonth = lmit[i];
+            coldestMonthPos = i;
+        }
+    }
+
+    printf("Hottest month: %s, Temperature: %f\n", dt[hottestMonthPos], hottestMonth);
+    printf("Coldest month: %s, Temperature: %f\n", dt[coldestMonthPos], coldestMonth);
+}
+
 int main(void)
 {
     // Some updates here and there lololollolol
@@ -274,5 +303,7 @@ int main(void)
     calcYearlyAverages();
     q1();
     q2();
+
+    q4();
     return 0;
 }
