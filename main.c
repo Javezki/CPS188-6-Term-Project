@@ -27,8 +27,15 @@ double lmitu[DATA_COUNT];
 double loat[DATA_COUNT];
 // Land and Ocean Average Temperature Uncertainty
 double loatu[DATA_COUNT];
+// Land Average Temperature Yearly Averages
+double latYearlyAverage[NUM_YEARS];
+// Land Max Temperature Yearly Averages
+double lmtYearlyAverage[NUM_YEARS];
+// Land Min Temperature Yearly Averages
+double lmitYearlyAverage[NUM_YEARS];
+// Land and Ocean Average Temperature Yearly Averages
+double loatYearlyAverage[NUM_YEARS];
 
-double yearlyAverages[NUM_YEARS];
 
 /**
  * Function to get the count of data entries in a file.
@@ -193,18 +200,25 @@ int getYearlyArrPosition(int year) {
  * The average latitude is calculated by summing up the latitudes for each month in the year and dividing by 12.
  * The calculated yearly averages are stored in the `yearlyAverages` array.
  */
-void calcYearlyAverages()
+void calcYearlyAverages(double *values, double *yearlyAverages)
 {
     double sum = 0;
     for (int i = 0; i <= NUM_YEARS; i++)
     {
         for (int j = 0; j < 12; j++)
         {
-            sum += lat[i * 12 + j];
+            sum += values[i * 12 + j];
         }
         yearlyAverages[i] = sum / 12;
         sum = 0;
     }
+}
+
+void computeYearlyAverage() {
+    calcYearlyAverages(lat, latYearlyAverage);
+    calcYearlyAverages(lmt, lmtYearlyAverage);
+    calcYearlyAverages(lmit, lmitYearlyAverage);
+    calcYearlyAverages(loat, loatYearlyAverage);
 }
 
 /**
@@ -239,7 +253,7 @@ void writeGNUPlot(int* xvalues, double* yvalues, char* xName, char* yName, int s
         perror("Failed to open file");
         return;
     }
-    for (int i = 0; i <= size; i++)
+    for (int i = 0; i < size; i++)
     {
         fprintf(file, "%d %lf\n", xvalues[i], yvalues[i]);
     }
@@ -257,7 +271,7 @@ void q1()
     // 10 is the year 1760
     for (int i = 10; i <= NUM_YEARS; i++)
     {
-        printf("Year: %d, Average: %f\n", i + 1750, yearlyAverages[i]);
+        printf("Year: %d, Average: %f\n", i + 1750, latYearlyAverage[i]);
     }
 }
 /**
@@ -401,14 +415,14 @@ void q5()
     double coldestYear = __DBL_MAX__;
     for (int i = 10; i <= NUM_YEARS; i++)
     {
-        if (yearlyAverages[i] > hottestYear)
+        if (latYearlyAverage[i] > hottestYear)
         {
-            hottestYear = yearlyAverages[i];
+            hottestYear = latYearlyAverage[i];
             hottestYearPos = i;
         }
-        if (yearlyAverages[i] < coldestYear)
+        if (latYearlyAverage[i] < coldestYear)
         {
-            coldestYear = yearlyAverages[i];
+            coldestYear = latYearlyAverage[i];
             coldestYearPos = i;
         }
     }
@@ -423,7 +437,7 @@ void q6() {
         xvalues[i - 10] = i + 1750;
     }
     // Subtract 10 to avoid the last 10 years after 2015
-    writeGNUPlot(xvalues, yearlyAverages, "Years 1760 - 2015", "Temperatures" ,NUM_YEARS - 10, "yearlyAverages.dat", 0);
+    writeGNUPlot(xvalues, latYearlyAverage, "Years 1760 - 2015", "Temperatures" ,NUM_YEARS - 9, "Question-6.dat", 0);
 }
 
 void q7() {
@@ -431,19 +445,16 @@ void q7() {
     double yvalues[101];
     double yvalues2[101];
     for (int i = 0; i <= 100; i++) {
-        printf("Testing i %d\n", i);
         xvalues[i] = i;
-        printf("Testing xValues %d\n", xvalues[i]);
-        yvalues[i] = yearlyAverages[getYearlyArrPosition(1800 + i)];
-        yvalues2[i] = yearlyAverages[getYearlyArrPosition(1900 + i)];
+        yvalues[i] = latYearlyAverage[getYearlyArrPosition(1800 + i)];
+        yvalues2[i] = latYearlyAverage[getYearlyArrPosition(1900 + i)];
     }
-    printf("Testing xValues 0 %d\n", xvalues[0]);
-    printf("Testing yValues 0 %lf\n", yvalues[0]);
-    printf("Testing xValues 1 %d\n", xvalues[1]);
-    printf("Testing yValues 1 %lf\n", yvalues[1]);
+    writeGNUPlot(xvalues, yvalues, "1800-1900", "Temps", 101, "Question-7-1800.dat", 0);
+    writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 101, "Question-7-1900.dat", 1);
+}
 
-    writeGNUPlot(xvalues, yvalues, "1800-1900", "Temps", 100, "Question-7.dat", 0);
-    writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 100, "Question-7.dat", 1);
+void q8() {
+
 }
 
 int main(void)
@@ -452,7 +463,7 @@ int main(void)
     // Call function to get data count
     setValuesFromFile();
     // Calculate the yearly averages
-    calcYearlyAverages();
+    computeYearlyAverage();
     q1();
     q2();
     q3();
