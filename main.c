@@ -293,6 +293,33 @@ void q4()
     printf("Coldest month: %s, Temperature: %f\n", dt[coldestMonthPos], coldestMonth);
 }
 
+void q5()
+{
+    int hottestYearPos = 0;
+    int coldestYearPos = 0;
+
+    // Use max and min double values to ensure the first
+    // value is always greater or less than the current value  
+    double hottestYear = __DBL_MIN__;
+    double coldestYear = __DBL_MAX__;
+    for (int i = 10; i <= NUM_YEARS; i++)
+    {
+        if (yearlyAverages[i] > hottestYear)
+        {
+            hottestYear = yearlyAverages[i];
+            hottestYearPos = i;
+        }
+        if (yearlyAverages[i] < coldestYear)
+        {
+            coldestYear = yearlyAverages[i];
+            coldestYearPos = i;
+        }
+    }
+
+    printf("Hottest year: %d, Temperature: %f\n", hottestYearPos + 1750, hottestYear);
+    printf("Coldest year: %d, Temperature: %f\n", coldestYearPos + 1750, coldestYear);
+}
+
 int main(void)
 {
     // Some updates here and there lololollolol
@@ -304,5 +331,6 @@ int main(void)
     q2();
 
     q4();
+    q5();
     return 0;
 }
