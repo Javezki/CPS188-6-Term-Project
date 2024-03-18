@@ -259,9 +259,62 @@ void q2()
     // Print the average land temperature for the 21th century
     printf("18th century average land temperature: %f\n", avg_temp_21th / 191);
 }
+
+/**
+ * Based on the land average temperature column, calculate the monthly averages
+ * for each month for all years combined between 1900 and 2015. A total of twelve
+ * averages. One average per month.
+ */
 void q3()
 {
-    printf("Whatever q3 is ");
+    // Declaring the variables sum and month
+    double sum, month;
+
+    // This loop will go through the 12 months of the year (January, Febuary, ......)
+    for (int i = 0; i < 12; i++)
+    {
+        sum = 0;
+
+        // This loops through the years between 1900 and 2015
+        for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01"); j += 12)
+        {
+
+            sum += lat[i];
+        }
+
+        // This prints out the month average over the years of 1900 2015
+        printf("This is the average from 1900 to 2015 for the month ");
+
+        switch (i)
+        {
+        case 0:
+            printf("January ");
+            break;
+        case 1:
+            printf("February ");
+            break;
+        case 2:
+            printf("March ");
+            break;
+        case 3:
+            printf("April ");
+            break;
+        case 4:
+            printf("May ");
+            break;
+        case 5:
+            printf("June ");
+            break;
+        case 6:
+            printf("July ");
+            break;
+        case 7:
+            printf("August ");
+            break;
+        }
+
+        printf("%lf\n", (sum / 116));
+    }
 }
 
 void q4()
@@ -299,7 +352,7 @@ void q5()
     int coldestYearPos = 0;
 
     // Use max and min double values to ensure the first
-    // value is always greater or less than the current value  
+    // value is always greater or less than the current value
     double hottestYear = __DBL_MIN__;
     double coldestYear = __DBL_MAX__;
     for (int i = 10; i <= NUM_YEARS; i++)
@@ -329,7 +382,7 @@ int main(void)
     calcYearlyAverages();
     q1();
     q2();
-
+    q3();
     q4();
     q5();
     return 0;
