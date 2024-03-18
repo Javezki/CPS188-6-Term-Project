@@ -54,3 +54,5 @@ dkms.conf
 # VSCode Folder
 .vscode/
 output/
+Question-7.dat
+yearlyAverages.dat
