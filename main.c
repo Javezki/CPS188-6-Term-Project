@@ -267,18 +267,48 @@ void q2()
  */
 void q3()
 {
-    double sum;
+    double sum, month;
 
-    for (int i = 0; i < 115; i++)
+    for (int i = 0; i < 12; i++)
     {
 
-        for (int i = getArrPosition("1900-01-01"); i < getArrPosition("2015-01-01"); i += 12)
+        for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01") + i; j += 12)
         {
 
             sum += lat[i];
         }
 
-        printf("For the month of January, the land average is: %lf", sum / 116);
+        printf("This is the average from 1900 to 2015 for the month ");
+
+        switch (i)
+        {
+        case 0:
+            printf("January ");
+            break;
+        case 1:
+            printf("February ");
+            break;
+        case 2:
+            printf("March ");
+            break;
+        case 3:
+            printf("April ");
+            break;
+        case 4:
+            printf("May ");
+            break;
+        case 5:
+            printf("June ");
+            break;
+        case 6:
+            printf("July ");
+            break;
+        case 7:
+            printf("August ");
+            break;
+        }
+
+        printf("%lf\n", sum / 116);
     }
 }
 
@@ -318,10 +348,9 @@ int main(void)
     setValuesFromFile();
     // Calculate the yearly averages
     calcYearlyAverages();
-    // q1();
-    // q2();
+    q1();
+    q2();
     q3();
-
     q4();
     return 0;
 }
