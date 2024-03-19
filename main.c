@@ -311,6 +311,39 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
     printf("File written: %s\n", fileName);
 }
 
+/**
+ * Writes data points to a file in GNUPlot format.
+ *
+ * This function takes arrays of x and y values, along with their corresponding names,
+ * and writes them to a file in GNUPlot format. The data points are written from the
+ * startIndex to the endIndex (exclusive) in the arrays.
+ *
+ * @param xvalues    An array of integers representing the x values.
+ * @param yvalues    An array of doubles representing the y values.
+ * @param xName      The name of the x values.
+ * @param yName      The name of the y values.
+ * @param size       The size of the arrays.
+ * @param fileName   The name of the file to write the data to.
+ * @param startIndex The index to start writing from in the arrays.
+ * @param endIndex   The index to stop writing at in the arrays (exclusive).
+ */
+void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, int size, char*fileName, int startIndex, int endIndex) {
+    FILE *file;
+    file = fopen(fileName, "w");
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+    fprintf(file, "# %s vs %s\n", xName, yName);
+    for (int i = startIndex; i < endIndex; i++)
+    {
+        fprintf(file, "%d %lf\n", xvalues[i], yvalues[i]);
+    }
+    fclose(file);
+    printf("File written: %s\n", fileName);
+}
+
 
 /**
  * Based on the land average temperature column, calculate the yearly averages for each year
