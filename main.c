@@ -278,6 +278,39 @@ void computeYearlyAverage()
  * @param fileName The name of the file to write the data to.
  * @param isAppended A flag indicating whether to append to an existing file (1) or create a new file (0).
  */
+void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int size, char *fileName, int isAppended)
+{
+    FILE *file;
+    // printf("Testing xValues 0 %d\n", xvalues[0]);
+    // printf("Testing yValues 0 %lf\n", yvalues[0]);
+    // printf("Testing xValues 1 %d\n", xvalues[1]);
+    // printf("Testing yValues 1 %lf\n", yvalues[1]);
+    switch (isAppended)
+    {
+    case 0:
+        file = fopen(fileName, "w");
+        break;
+    case 1:
+        file = fopen(fileName, "a");
+        break;
+    default:
+        perror("Invalid file mode");
+        return;
+    }
+    fprintf(file, "# %s vs %s\n", xName, yName);
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+    for (int i = 0; i < size; i++)
+    {
+        fprintf(file, "%d %lf\n", xvalues[i], yvalues[i]);
+    }
+    fclose(file);
+    printf("File written: %s\n", fileName);
+}
+
 
 /**
  * Based on the land average temperature column, calculate the yearly averages for each year
