@@ -48,6 +48,27 @@ double lmitYearlyAverage[NUM_YEARS];
 // Land and Ocean Average Temperature Yearly Averages
 double loatYearlyAverage[NUM_YEARS];
 
+// Array of pointers to the yearly averages
+// 0 is LAT
+// 1 is LMT
+// 2 is LMIT
+// 3 is LOAT
+double *yearlyAverages[] = {
+    latYearlyAverage,
+    lmtYearlyAverage,
+    lmitYearlyAverage,
+    loatYearlyAverage};
+
+// Array of pointers to the data arrays
+// 0 is LAT
+// 1 is LMT
+// 2 is LMIT
+// 3 is LOAT
+double *data[] = {
+    lat,
+    lmt,
+    lmit,
+    loat};
 /**
  * Function to get the count of data entries in a file.
  * This function reads a file named "GlobalTemperatures.csv" and counts the total entries of data.
@@ -55,6 +76,19 @@ double loatYearlyAverage[NUM_YEARS];
  * @note Might remove this if global temp file is guaranteed a certain size
  * @return void
  */
+
+// Global array of file names
+char fileNames[10][50] = {
+    "Question-6.dat",
+    "Question-7-1800.dat",
+    "Question-7-1900.dat",
+    "Question-8-lat.dat",
+    "Question-8-lmt.dat",
+    "Question-8-lmit.dat",
+    "Question-9-firstCentury.dat",
+    "Question-9-secondCentury.dat",
+    "Question-9-thirdCentury.dat",
+    "Question-9-fourthCentury.dat"};
 void setValuesFromFile()
 {
     FILE *file;
@@ -491,18 +525,34 @@ void q8()
         adjustedLatYearlyAverage[i - 1850] = latYearlyAverage[getYearlyArrPosition(i)];
         adjustedLmtYearlyAverage[i - 1850] = lmtYearlyAverage[getYearlyArrPosition(i)];
         adjustedLmitYearlyAverage[i - 1850] = lmitYearlyAverage[getYearlyArrPosition(i)];
-        // printf("Year: %d, Adjusted Lat: %f, Adjusted Lmt: %f, Adjusted Lmit: %f\n", i, 
-        //     adjustedLatYearlyAverage[i - 1850], 
-        //     adjustedLmtYearlyAverage[i - 1850], 
-        //     adjustedLmitYearlyAverage[i - 1850]);      
+        // printf("Year: %d, Adjusted Lat: %f, Adjusted Lmt: %f, Adjusted Lmit: %f\n", i,
+        //     adjustedLatYearlyAverage[i - 1850],
+        //     adjustedLmtYearlyAverage[i - 1850],
+        //     adjustedLmitYearlyAverage[i - 1850]);
     }
     writeGNUPlot(xvalues, adjustedLatYearlyAverage, "Years 1850 - 2015", "Avg Temperatures", numYears, "Question-8-lat.dat", 0);
     writeGNUPlot(xvalues, adjustedLmtYearlyAverage, "Years 1850 - 2015", "Max Temperatures", numYears, "Question-8-lmt.dat", 0);
     writeGNUPlot(xvalues, adjustedLmitYearlyAverage, "Years 1850 - 2015", "Min Temperatures", numYears, "Question-8-lmit.dat", 0);
 }
 
+void q9()
+{
+    
+}
+
+
+void cleanup()
+{
+    // Remove files using the global array of file names
+    for (int i = 0; i < 10; i++)
+    {
+        remove(fileNames[i]);
+    }
+}
+
 int main(void)
 {
+    cleanup();
     // remove("debug.txt");
     // Some updates here and there lololollolol
     // Call function to get data count
@@ -517,6 +567,7 @@ int main(void)
     q6();
     q7();
     q8();
+    q9();
     // int arrPos = getYearlyArrPosition(1850);
     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
