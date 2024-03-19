@@ -69,13 +69,6 @@ double *data[] = {
     lmt,
     lmit,
     loat};
-/**
- * Function to get the count of data entries in a file.
- * This function reads a file named "GlobalTemperatures.csv" and counts the total entries of data.
- * It also prints out each line of data while counting.
- * @note Might remove this if global temp file is guaranteed a certain size
- * @return void
- */
 
 // Global array of file names
 char fileNames[10][50] = {
