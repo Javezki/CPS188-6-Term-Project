@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
 #define DATE_SIZE 11
 #define DATA_COUNT 3192
@@ -277,6 +278,7 @@ void computeYearlyAverage()
  * @param size The size of the arrays.
  * @param fileName The name of the file to write the data to.
  * @param isAppended A flag indicating whether to append to an existing file (1) or create a new file (0).
+ * @deprecated Use writeColumns() instead
  */
 void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int size, char *fileName, int isAppended)
 {
@@ -311,6 +313,69 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
     printf("File written: %s\n", fileName);
 }
 
+/**
+ * Writes data to a file in column format.
+ *
+ * @param size The number of elements in the arrays.
+ * @param fileName The name of the file to write to.
+ * @param isAppended Flag indicating whether to append to an existing file (1) or create a new file (0).
+ * @param numColumns The number of columns in the data.
+ * @param columnNames An array of strings representing the column names.
+ * @param xValues An array of integers representing the x-values.
+ * @param columns An array of arrays representing the data columns.
+ * @param ... Optional additional columns to write.
+ */
+void writeColumns(int size, char* fileName, int isAppended, int numColumns, char* columnNames[], int xValues[], double columns[], ...)
+{
+    FILE* file;
+    switch (isAppended)
+    {
+        case 0:
+            file = fopen(fileName, "w");
+            break;
+        case 1:
+            file = fopen(fileName, "a");
+            break;
+        default:
+            perror("Invalid file mode");
+            return;
+    }
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+    fprintf(file, "# ");
+    for (int i = 0; i < numColumns; i++)
+    {
+        fprintf(file, "%s ", columnNames[i]);
+    }
+    fprintf(file, "\n");
+    
+    va_list args;
+    va_start(args, columns);
+    double* allArrays[numColumns];
+    for (int i = 0; i < numColumns - 2; i++) {
+        
+        allArrays[i] = va_arg(args, double*);
+    }
+    va_end(args);
+    for (int i = 0; i < size; i++)
+    {
+        fprintf(file, "%d ", xValues[i]);
+        fprintf(file, "%lf ", columns[i]);
+        for (int j = 0; j < numColumns - 2; j++)
+        {
+            fprintf(file, "%lf ", allArrays[j][i]);
+        }
+        fprintf(file, "\n");
+    }
+    printf("File written: %s\n", fileName);
+}
+
+/**
+ * @deprecated Why did we have this in the first place?
+*/
 void writeGNUPlot2(int *xvalues, double *yvalues, double *zvalues, char *xName, char *yName, char *zName, int size, char *fileName, int isAppended)
 {
     FILE *file;
