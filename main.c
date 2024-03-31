@@ -641,21 +641,47 @@ void q9()
  */
 void q10()
 {
+    // Decalres variables for the x, y, and z values
     int x_values[180];
 
+    // This loop will go through the 180 months of the year sounds the amount of months in 15 years
     for (int i = 0; i < 180; i++)
     {
         x_values[i] = i + 1;
     }
     double yvalues[180];
     double zvalues[180];
+
+    // This loop goes through 180 months for 15 years getting the average land temperature and the uncertainty
     for (int i = 0; i < 180; i++)
     {
         yvalues[i] = lat[getArrPosition("2000-01-01") + i];
         zvalues[i] = latu[getArrPosition("2000-01-01") + i];
     }
 
+    // This write the amount of monts, average land temperature, and uncertainty to a file
     writeGNUPlot2(x_values, yvalues, zvalues, "Month", "Monthly Average Land Temperature", "Uncertainty", 180, "Question-10.dat", 0);
+}
+/**
+ * Generate a GNUPlot data file and use GNUPlot to do a plot similar to what you
+ * did in question 6 but only for the years 1850 to 2015 and add the data for the
+ * land and ocean average temperatures columns. Have the three lines on the same
+ * figure. Label the axes clearly and add a title and legend to your graph..
+ */
+void q11()
+{
+    int xvalues[166];
+    double yvalues[166];
+    double zvalues[166];
+
+    for (int i = 0; i < 166; i++)
+    {
+        xvalues[i] = i + 1850;
+        yvalues[i] = lmtYearlyAverage[i + 100];
+        zvalues[i] = loatYearlyAverage[i + 100];
+    }
+    writeGNUPlot(xvalues, yvalues, "Years", "Land Temperatures", 166, "Question-11-Land.dat", 0);
+    writeGNUPlot(xvalues, zvalues, "Years", "Land and Ocean Temperatures", 166, "Question-11-Land and Ocean.dat", 0);
 }
 /**
  * @brief Cleans up files using the global array of file names.
@@ -691,6 +717,7 @@ int main(void)
     q8();
     q9();
     q10();
+    q11();
     // int arrPos = getYearlyArrPosition(1850);
     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
