@@ -591,13 +591,34 @@ void q8()
 
 /**
  * Using the columns LandAverageTemperature, LandMaxTemperature and LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make four bar 
- * plots (box or histogram plos) that show the average, low and high temperatures for each of the four centuries. 
+ * plots (box or histogram plots) that show the average, low and high temperatures for each of the four centuries. 
  * Put all 4 century plots on the same figure displayed as subplots (multiplots). 
  * Each plot will show the boxes with different colours (one colour per century). 
  * Have a title to your figure and have the name of the century on each subplot. Have a legend on each subplot.
 */
 void q9()
 {
+    int xvalues[101];
+    double lat[101];
+    double lmt[101];
+    double lmit[101];
+
+    //1750 - 1799
+    for (int i = 0; i <= 50; i++){
+
+    }
+    //1800 - 1899
+    for (int i = 0; i <= 100; i++){
+
+    }
+    //1900 - 1999
+    for (int i = 0; i <= 100; i++){
+
+    }
+    //2000 - 2015
+    for (int i = 0; i <= 16; i++){
+
+    }
 }
 
 
