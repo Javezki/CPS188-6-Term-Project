@@ -56,3 +56,6 @@ dkms.conf
 output/
 Question-7.dat
 yearlyAverages.dat
+
+*.dat
+*.png
