@@ -311,6 +311,39 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
     printf("File written: %s\n", fileName);
 }
 
+void writeGNUPlot2(int *xvalues, double *yvalues, double *zvalues, char *xName, char *yName, char *zName, int size, char *fileName, int isAppended)
+{
+    FILE *file;
+    // printf("Testing xValues 0 %d\n", xvalues[0]);
+    // printf("Testing yValues 0 %lf\n", yvalues[0]);
+    // printf("Testing xValues 1 %d\n", xvalues[1]);
+    // printf("Testing yValues 1 %lf\n", yvalues[1]);
+    switch (isAppended)
+    {
+    case 0:
+        file = fopen(fileName, "w");
+        break;
+    case 1:
+        file = fopen(fileName, "a");
+        break;
+    default:
+        perror("Invalid file mode");
+        return;
+    }
+    fprintf(file, "# %s vs %s vs %s\n", xName, yName, zName);
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+    for (int i = 0; i < size; i++)
+    {
+        fprintf(file, "%d %lf %lf\n", xvalues[i], yvalues[i], zvalues[i]);
+    }
+    fclose(file);
+    printf("File written: %s\n", fileName);
+}
+
 /**
  * Writes data points to a file in GNUPlot format.
  *
@@ -327,7 +360,8 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
  * @param startIndex The index to start writing from in the arrays.
  * @param endIndex   The index to stop writing at in the arrays (exclusive).
  */
-void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, int size, char*fileName, int startIndex, int endIndex) {
+void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, int size, char *fileName, int startIndex, int endIndex)
+{
     FILE *file;
     file = fopen(fileName, "w");
     if (file == NULL)
@@ -343,7 +377,6 @@ void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, 
     fclose(file);
     printf("File written: %s\n", fileName);
 }
-
 
 /**
  * Based on the land average temperature column, calculate the yearly averages for each year
@@ -523,8 +556,8 @@ void q5()
     printf("Coldest year: %d, Temperature: %f\n", coldestYearPos + 1750, coldestYear);
 }
 /**
- * Based on your answer in question 1, generate a GNUPlot data file and use GNUPlot to 
- * make a graph (line plot) of the yearly temperatures for the years 1760 to 2015. 
+ * Based on your answer in question 1, generate a GNUPlot data file and use GNUPlot to
+ * make a graph (line plot) of the yearly temperatures for the years 1760 to 2015.
  * Label the axes clearly and add a title and legend to your graph.
  */
 void q6()
@@ -539,10 +572,10 @@ void q6()
 }
 
 /**
- * Generate a GNUPlot data file and use GNUPlot to make a graph (line plots) of the average land temperatures for the 19th and 20th centuries. 
- * Put both lines on the same figure. Ensure that you have the same x-axis scale (for example 1852 and 1952 would both have an x-value of 52).  
- * Have your two line plots with different colours. Label the axes clearly and add a title and legend to your graph. 
-*/
+ * Generate a GNUPlot data file and use GNUPlot to make a graph (line plots) of the average land temperatures for the 19th and 20th centuries.
+ * Put both lines on the same figure. Ensure that you have the same x-axis scale (for example 1852 and 1952 would both have an x-value of 52).
+ * Have your two line plots with different colours. Label the axes clearly and add a title and legend to your graph.
+ */
 void q7()
 {
     int xvalues[101];
@@ -559,10 +592,10 @@ void q7()
 }
 
 /**
- * Using the columns LandAverageTemperature, LandMaxTemperature and LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make 
- * line plots that show all three temperatures on the same figure. Use the years for the x-axis (use only the years between 1850 and 2015) 
- * and the yearly averages for the y-axis. Use three different colours (or different line styles) for the three lines. 
- * Make sure that the line plotting LandAverageTemperature stands out from the other two (ex: make that line thicker). 
+ * Using the columns LandAverageTemperature, LandMaxTemperature and LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make
+ * line plots that show all three temperatures on the same figure. Use the years for the x-axis (use only the years between 1850 and 2015)
+ * and the yearly averages for the y-axis. Use three different colours (or different line styles) for the three lines.
+ * Make sure that the line plotting LandAverageTemperature stands out from the other two (ex: make that line thicker).
  * Make sure your graph has a title, axes labels and a legend that explicitly tells which line is which.
 
 */
@@ -590,20 +623,43 @@ void q8()
 }
 
 /**
- * Using the columns LandAverageTemperature, LandMaxTemperature and LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make four bar 
- * plots (box or histogram plos) that show the average, low and high temperatures for each of the four centuries. 
- * Put all 4 century plots on the same figure displayed as subplots (multiplots). 
- * Each plot will show the boxes with different colours (one colour per century). 
+ * Using the columns LandAverageTemperature, LandMaxTemperature and LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make four bar
+ * plots (box or histogram plos) that show the average, low and high temperatures for each of the four centuries.
+ * Put all 4 century plots on the same figure displayed as subplots (multiplots).
+ * Each plot will show the boxes with different colours (one colour per century).
  * Have a title to your figure and have the name of the century on each subplot. Have a legend on each subplot.
-*/
+ */
 void q9()
 {
 }
 
+/**
+ * For the years 2000 to 2015, generate a GNUPlot data file and use GNUPlot to
+ * make an error bar plot of the average land temperature by month. Use the
+ * uncertainty column for land temperatures to draw the error bars.
+ *
+ */
+void q10()
+{
+    int x_values[180];
 
+    for (int i = 0; i < 180; i++)
+    {
+        x_values[i] = i + 1;
+    }
+    double yvalues[180];
+    double zvalues[180];
+    for (int i = 0; i < 180; i++)
+    {
+        yvalues[i] = lat[getArrPosition("2000-01-01") + i];
+        zvalues[i] = latu[getArrPosition("2000-01-01") + i];
+    }
+
+    writeGNUPlot2(x_values, yvalues, zvalues, "Month", "Monthly Average Land Temperature", "Uncertainty", 180, "Question-10.dat", 0);
+}
 /**
  * @brief Cleans up files using the global array of file names.
- * 
+ *
  * This function iterates over the global array of file names and removes each file using the `remove()` function.
  * The array size is assumed to be 10.
  */
@@ -634,6 +690,7 @@ int main(void)
     q7();
     q8();
     q9();
+    q10();
     // int arrPos = getYearlyArrPosition(1850);
     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
