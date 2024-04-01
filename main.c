@@ -330,7 +330,7 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
  * @param columns An array of arrays representing the data columns.
  * @param ... Optional additional columns to write.
  */
-void writeColumns(int size, char* fileName, int isAppended, int numColumns, char* columnNames[], int xValues[], double columns[], ...)
+void writeColumns(int size, char* fileName, int isAppended, int numColumns, int xValues[], double columns[], ...)
 {
     FILE* file;
     switch (isAppended)
@@ -350,13 +350,7 @@ void writeColumns(int size, char* fileName, int isAppended, int numColumns, char
         perror("Failed to open file");
         return;
     }
-    fprintf(file, "# ");
-    for (int i = 0; i < numColumns; i++)
-    {
-        fprintf(file, "%s ", columnNames[i]);
-    }
-    fprintf(file, "\n");
-    
+
     va_list args;
     va_start(args, columns);
     double* allArrays[numColumns];
@@ -689,6 +683,7 @@ void q7()
         yvalues[i] = latYearlyAverage[getYearlyArrPosition(1800 + i)];
         yvalues2[i] = latYearlyAverage[getYearlyArrPosition(1900 + i)];
     }
+    writeColumns(101, "Question-7.dat", 0, 3, xvalues, yvalues);
     writeGNUPlot(xvalues, yvalues, "1800-1900", "Temps", 101, "Question-7-1800.dat", 0);
     writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 101, "Question-7-1900.dat", 0);
 }
