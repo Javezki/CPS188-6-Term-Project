@@ -610,28 +610,21 @@ void q4()
     int hottestMonthPos = 0;
     int coldestMonthPos = 0;
 
-    // Use max and min double values to ensure the first
-    // value is always greater or less than the current value
-    double hottestMonth = __DBL_MIN__;
-    double coldestMonth = __DBL_MAX__;
+
     for (int i = 0; i < DATA_COUNT; i++)
     {
-        // Check if the current month's temperature is greater than the current hottest month
-        if (lmt[i] > hottestMonth)
+        if (lat[i] > lat[hottestMonthPos])
         {
-            hottestMonth = lmt[i];
             hottestMonthPos = i;
         }
-        // Check if the current month's temperature is less than the current coldest month
-        if (lmit[i] < coldestMonth)
+        if (lat[i] < lat[coldestMonthPos])
         {
-            coldestMonth = lmit[i];
             coldestMonthPos = i;
         }
     }
 
-    printf("Hottest month: %s, Temperature: %f\n", dt[hottestMonthPos], hottestMonth);
-    printf("Coldest month: %s, Temperature: %f\n", dt[coldestMonthPos], coldestMonth);
+    printf("Hottest month: %s, Temperature: %f\n", dt[hottestMonthPos], lat[hottestMonthPos]);
+    printf("Coldest month: %s, Temperature: %f\n", dt[coldestMonthPos], lat[coldestMonthPos]);
 }
 
 /**
@@ -871,27 +864,34 @@ void cleanup()
     }
 }
 
-int main(void)
-{
+// int main(void)
+// {
+//     cleanup();
+//     // remove("debug.txt");
+//     // Some updates here and there lololollolol
+//     // Call function to get data count
+//     setValuesFromFile();
+//     // Calculate the yearly averages
+//     computeYearlyAverage();
+//     q1();
+//     q2();
+//     q3();
+//     q4();
+//     q5();
+//     q6();
+//     q7();
+//     q8();
+//     q9();
+//     q10();
+//     q11();
+//     // int arrPos = getYearlyArrPosition(1850);
+//     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
+//     return 0;
+// }
+
+int main(void) {
     cleanup();
-    // remove("debug.txt");
-    // Some updates here and there lololollolol
-    // Call function to get data count
     setValuesFromFile();
-    // Calculate the yearly averages
     computeYearlyAverage();
-    q1();
-    q2();
-    q3();
     q4();
-    q5();
-    q6();
-    q7();
-    q8();
-    q9();
-    q10();
-    q11();
-    // int arrPos = getYearlyArrPosition(1850);
-    // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
-    return 0;
 }
