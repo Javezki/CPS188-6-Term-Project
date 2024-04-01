@@ -72,7 +72,7 @@ double *data[] = {
     loat};
 
 // Global array of file names
-char fileNames[10][50] = {
+char fileNames[13][50] = {
     "Question-6.dat",
     "Question-7-1800.dat",
     "Question-7-1900.dat",
@@ -82,7 +82,11 @@ char fileNames[10][50] = {
     "Question-9-firstCentury.dat",
     "Question-9-secondCentury.dat",
     "Question-9-thirdCentury.dat",
-    "Question-9-fourthCentury.dat"};
+    "Question-9-fourthCentury.dat",
+    "Question-10.dat",
+    "Question-11-Land.dat",
+    "Question-11-Land and Ocean.dat"
+    };
 void setValuesFromFile()
 {
     FILE *file;
@@ -226,6 +230,7 @@ int getArrPosition(char *date)
         printf("Error: Invalid date format\n");
         exit(1);
     }
+
     return (year - 1750) * 12 + month - 1;
 }
 
@@ -480,7 +485,7 @@ void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, 
 void q1()
 {
     // 10 is the year 1760
-    for (int i = 10; i <= NUM_YEARS; i++)
+    for (int i = getYearlyArrPosition(1760); i <= NUM_YEARS; i++)
     {
         printf("Year: %d, Average: %f\n", i + 1750, latYearlyAverage[i]);
     }
@@ -510,7 +515,7 @@ void q2()
         avg_temp_19th += lat[i];
     }
     // Print the average land temperature for the 19th century
-    printf("18th century average land temperature: %f\n", avg_temp_19th / 1200);
+    printf("19th century average land temperature: %f\n", avg_temp_19th / 1200);
 
     // 20th century (1900-1999)
     for (int i = getArrPosition("1900-01-01"); i < getArrPosition("1999-12-01"); i++)
@@ -518,7 +523,7 @@ void q2()
         avg_temp_20th += lat[i];
     }
     // Print the average land temperature for the 20th century
-    printf("18th century average land temperature: %f\n", avg_temp_20th / 1200);
+    printf("20th century average land temperature: %f\n", avg_temp_20th / 1200);
 
     // 21st century (2000-2015)
     for (int i = getArrPosition("2000-01-01"); i < getArrPosition("2015-12-01"); i++)
@@ -526,7 +531,7 @@ void q2()
         avg_temp_21th += lat[i];
     }
     // Print the average land temperature for the 21th century
-    printf("18th century average land temperature: %f\n", avg_temp_21th / 191);
+    printf("21st century average land temperature: %f\n", avg_temp_21th / 191);
 }
 
 /**
@@ -547,8 +552,7 @@ void q3()
         // This loops through the years between 1900 and 2015
         for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01"); j += 12)
         {
-
-            sum += lat[i];
+            sum += lat[j];
         }
 
         // This prints out the month average over the years of 1900 2015
@@ -580,8 +584,19 @@ void q3()
         case 7:
             printf("August ");
             break;
+        case 8:
+            printf("September ");
+            break;
+        case 9:
+            printf("October ");
+            break;
+        case 10:
+            printf("November ");
+            break;
+        case 11:
+            printf("December ");
+            break;
         }
-
         printf("%lf\n", (sum / 116));
     }
 }
@@ -596,28 +611,21 @@ void q4()
     int hottestMonthPos = 0;
     int coldestMonthPos = 0;
 
-    // Use max and min double values to ensure the first
-    // value is always greater or less than the current value
-    double hottestMonth = __DBL_MIN__;
-    double coldestMonth = __DBL_MAX__;
+
     for (int i = 0; i < DATA_COUNT; i++)
     {
-        // Check if the current month's temperature is greater than the current hottest month
-        if (lmt[i] > hottestMonth)
+        if (lat[i] > lat[hottestMonthPos])
         {
-            hottestMonth = lmt[i];
             hottestMonthPos = i;
         }
-        // Check if the current month's temperature is less than the current coldest month
-        if (lmit[i] < coldestMonth)
+        if (lat[i] < lat[coldestMonthPos])
         {
-            coldestMonth = lmit[i];
             coldestMonthPos = i;
         }
     }
 
-    printf("Hottest month: %s, Temperature: %f\n", dt[hottestMonthPos], hottestMonth);
-    printf("Coldest month: %s, Temperature: %f\n", dt[coldestMonthPos], coldestMonth);
+    printf("Hottest month: %s, Temperature: %f\n", dt[hottestMonthPos], lat[hottestMonthPos]);
+    printf("Coldest month: %s, Temperature: %f\n", dt[coldestMonthPos], lat[coldestMonthPos]);
 }
 
 /**
@@ -800,21 +808,47 @@ void q9()
  */
 void q10()
 {
+    // Decalres variables for the x, y, and z values
     int x_values[180];
 
+    // This loop will go through the 180 months of the year sounds the amount of months in 15 years
     for (int i = 0; i < 180; i++)
     {
         x_values[i] = i + 1;
     }
     double yvalues[180];
     double zvalues[180];
+
+    // This loop goes through 180 months for 15 years getting the average land temperature and the uncertainty
     for (int i = 0; i < 180; i++)
     {
         yvalues[i] = lat[getArrPosition("2000-01-01") + i];
         zvalues[i] = latu[getArrPosition("2000-01-01") + i];
     }
 
+    // This write the amount of monts, average land temperature, and uncertainty to a file
     writeGNUPlot2(x_values, yvalues, zvalues, "Month", "Monthly Average Land Temperature", "Uncertainty", 180, "Question-10.dat", 0);
+}
+/**
+ * Generate a GNUPlot data file and use GNUPlot to do a plot similar to what you
+ * did in question 6 but only for the years 1850 to 2015 and add the data for the
+ * land and ocean average temperatures columns. Have the three lines on the same
+ * figure. Label the axes clearly and add a title and legend to your graph..
+ */
+void q11()
+{
+    int xvalues[166];
+    double yvalues[166];
+    double zvalues[166];
+
+    for (int i = 0; i < 166; i++)
+    {
+        xvalues[i] = i + 1850;
+        yvalues[i] = lmtYearlyAverage[i + 100];
+        zvalues[i] = loatYearlyAverage[i + 100];
+    }
+    writeGNUPlot(xvalues, yvalues, "Years", "Land Temperatures", 166, "Question-11-Land.dat", 0);
+    writeGNUPlot(xvalues, zvalues, "Years", "Land and Ocean Temperatures", 166, "Question-11-Land and Ocean.dat", 0);
 }
 /**
  * @brief Cleans up files using the global array of file names.
@@ -850,7 +884,9 @@ int main(void)
     q8();
     q9();
     q10();
+    q11();
     // int arrPos = getYearlyArrPosition(1850);
     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
 }
+
