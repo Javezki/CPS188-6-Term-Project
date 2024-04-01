@@ -409,6 +409,35 @@ void writeGNUPlot2(int *xvalues, double *yvalues, double *zvalues, char *xName, 
     printf("File written: %s\n", fileName);
 }
 
+void writeGNUPlot3(double yvalues, double zvalues, double avalues, char *xName, char *yName, char *zName, char *aName, char *fileName, int isAppended)
+{
+    FILE *file;
+    switch (isAppended)
+    {
+    case 0:
+        file = fopen(fileName, "w");
+        break;
+    case 1:
+        file = fopen(fileName, "a");
+        break;
+    default:
+        perror("Invalid file mode");
+        return;
+    }
+    fprintf(file, "# %s vs %s vs %s vs %s\n", xName, yName, zName, aName);
+    if (file == NULL)
+    {
+        perror("Failed to open file");
+        return;
+    }
+
+    fprintf(file, "Average %lf\n", yvalues);
+    fprintf(file, "Max %lf\n", zvalues);
+    fprintf(file, "Min %lf\n", avalues);
+    fclose(file);
+    printf("File written: %s\n", fileName);
+}
+
 /**
  * Writes data points to a file in GNUPlot format.
  *
@@ -696,6 +725,71 @@ void q8()
  */
 void q9()
 {
+    double latTot = 0, latAvg, max, min;
+    int i;
+
+    //1750-1799
+    for(i = 0; i < 50; i++){
+        latTot += latYearlyAverage[i];
+    }
+    latAvg = latTot/50;
+    max = lmt[0];
+    for(i = 0; i < 600; i++){
+        if(max < lmt[i]) max = lmt[i];
+    }
+    min = lmit[0];
+    for(i = 0; i < 600; i++){
+        if(min > lmit[i]) min = lmit[i];
+    }
+    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-firstCentury.dat", 0);
+
+    //1800-1899
+    latTot = 0;
+    for(int i = 0; i < 100; i++){
+        latTot += latYearlyAverage[i+50];
+    }
+    latAvg = latTot/100;
+    max = lmt[600];
+    for(i = 0; i < 1200; i++){
+        if(max < lmt[i+600]) max = lmt[i+600];
+    }
+    min = lmit[600];
+    for(i = 0; i < 1200; i++){
+        if(min > lmit[i+600]) min = lmit[i+600];
+    }
+    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-secondCentury.dat", 0);
+
+    //1900-1999
+    latTot = 0;
+    for(i = 0; i < 100; i++){
+        latTot += latYearlyAverage[i+150];
+    }
+    latAvg = latTot/100;
+    max = lmt[1800];
+    for(i = 0; i < 1200; i++){
+        if(max < lmt[i+1800]) max = lmt[i+1800];
+    }
+    min = lmit[1800];
+    for(i = 0; i < 1200; i++){
+        if(min > lmit[i+1800]) min = lmit[i+1800];
+    }
+    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-thirdCentury.dat", 0);
+
+    //2000-2015
+    latTot = 0;
+    for(i = 0; i < 16; i++){
+        latTot += latYearlyAverage[i+250];
+    }
+    latAvg = latTot/16;
+    max = lmt[3000];
+    for(i = 0; i < 192; i++){
+        if(max < lmt[i+3000]) max = lmt[i+3000];
+    }
+    min = lmit[3000];
+    for(i = 0; i < 192; i++){
+        if(min > lmit[i+3000]) min = lmit[i+3000];
+    }
+    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-fourthCentury.dat", 0);
 }
 
 /**
