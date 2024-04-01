@@ -72,17 +72,14 @@ double *data[] = {
     loat};
 
 // Global array of file names
-char fileNames[13][50] = {
+char fileNames[10][50] = {
     "Question-6.dat",
     "Question-7-1800.dat",
     "Question-7-1900.dat",
     "Question-8-lat.dat",
     "Question-8-lmt.dat",
     "Question-8-lmit.dat",
-    "Question-9-firstCentury.dat",
-    "Question-9-secondCentury.dat",
-    "Question-9-thirdCentury.dat",
-    "Question-9-fourthCentury.dat",
+    "Question-9.dat",
     "Question-10.dat",
     "Question-11-Land.dat",
     "Question-11-Land and Ocean.dat"
@@ -408,9 +405,13 @@ void writeGNUPlot2(int *xvalues, double *yvalues, double *zvalues, char *xName, 
     printf("File written: %s\n", fileName);
 }
 
-void writeGNUPlot3(double yvalues, double zvalues, double avalues, char *xName, char *yName, char *zName, char *aName, char *fileName, int isAppended)
+void writeGNUPlot3(int *xvalues, double *yvalues, double *zvalues, double *avalues, char *fileName, int isAppended)
 {
     FILE *file;
+    // printf("Testing xValues 0 %d\n", xvalues[0]);
+    // printf("Testing yValues 0 %lf\n", yvalues[0]);
+    // printf("Testing xValues 1 %d\n", xvalues[1]);
+    // printf("Testing yValues 1 %lf\n", yvalues[1]);
     switch (isAppended)
     {
     case 0:
@@ -423,16 +424,15 @@ void writeGNUPlot3(double yvalues, double zvalues, double avalues, char *xName, 
         perror("Invalid file mode");
         return;
     }
-    fprintf(file, "# %s vs %s vs %s vs %s\n", xName, yName, zName, aName);
     if (file == NULL)
     {
         perror("Failed to open file");
         return;
     }
-
-    fprintf(file, "Average %lf\n", yvalues);
-    fprintf(file, "Max %lf\n", zvalues);
-    fprintf(file, "Min %lf\n", avalues);
+    for (int i = 0; i < 3; i++)
+    {
+        fprintf(file, "%d %lf %lf %lf\n", xvalues[i], yvalues[i], zvalues[i], avalues[i]);
+    }
     fclose(file);
     printf("File written: %s\n", fileName);
 }
@@ -727,71 +727,69 @@ void q8()
  */
 void q9()
 {
-    double latTot = 0, latAvg, max, min;
+    char headers[4][10] = {"Century", "Average", "Max", "Min"};
+    int century[3] = {19, 20, 21};
+    double latavg[3], max[3], min[3];
+    double latTot = 0;
     int i;
-
-    //1750-1799
-    for(i = 0; i < 50; i++){
-        latTot += latYearlyAverage[i];
-    }
-    latAvg = latTot/50;
-    max = lmt[0];
-    for(i = 0; i < 600; i++){
-        if(max < lmt[i]) max = lmt[i];
-    }
-    min = lmit[0];
-    for(i = 0; i < 600; i++){
-        if(min > lmit[i]) min = lmit[i];
-    }
-    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-firstCentury.dat", 0);
 
     //1800-1899
     latTot = 0;
-    for(int i = 0; i < 100; i++){
-        latTot += latYearlyAverage[i+50];
+    //summing the yearly average temperatures for the 19th century, then finding the average
+    for(int i = getYearlyArrPosition(1800); i < getYearlyArrPosition(1900); i++){
+        latTot += latYearlyAverage[i];
     }
-    latAvg = latTot/100;
-    max = lmt[600];
-    for(i = 0; i < 1200; i++){
-        if(max < lmt[i+600]) max = lmt[i+600];
+    latavg[0] = latTot/100;
+    //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
+    max[0] = lmt[getArrPosition("1850-01-01")];
+    //checking the next temperature data entry and comparing to current max/min
+    for(i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++){
+        if(max[0] < lmt[i]) max[0] = lmt[i];
     }
-    min = lmit[600];
-    for(i = 0; i < 1200; i++){
-        if(min > lmit[i+600]) min = lmit[i+600];
+    min[0] = lmit[getArrPosition("1850-01-01")];
+
+    for(i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++){
+        if(min[0] > lmit[i]) min[0] = lmit[i];
     }
-    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-secondCentury.dat", 0);
 
     //1900-1999
     latTot = 0;
-    for(i = 0; i < 100; i++){
-        latTot += latYearlyAverage[i+150];
+    //summing the yearly average temperatures for the 20th century, then finding the average
+    for(i = getYearlyArrPosition(1900); i < getYearlyArrPosition(2000); i++){
+        latTot += latYearlyAverage[i];
     }
-    latAvg = latTot/100;
-    max = lmt[1800];
-    for(i = 0; i < 1200; i++){
-        if(max < lmt[i+1800]) max = lmt[i+1800];
+    latavg[1] = latTot/100;
+    //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
+    max[1] = lmt[getArrPosition("1900-01-01")];
+    for(i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++){
+        if(max[1] < lmt[i]) max[1] = lmt[i];
     }
-    min = lmit[1800];
-    for(i = 0; i < 1200; i++){
-        if(min > lmit[i+1800]) min = lmit[i+1800];
+    //checking the next temperature data entry and comparing to current max/min
+    min[1] = lmit[getArrPosition("1900-01-01")];
+    for(i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++){
+        if(min[1] > lmit[i]) min[1] = lmit[i];
     }
-    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-thirdCentury.dat", 0);
 
     //2000-2015
     latTot = 0;
-    for(i = 0; i < 16; i++){
-        latTot += latYearlyAverage[i+250];
+    //summing the yearly average temperatures for the 21st century, then finding the average
+    for(i = getYearlyArrPosition(2000); i <= getYearlyArrPosition(2015); i++){
+        latTot += latYearlyAverage[i];
     }
-    latAvg = latTot/16;
-    max = lmt[3000];
-    for(i = 0; i < 192; i++){
-        if(max < lmt[i+3000]) max = lmt[i+3000];
+    latavg[2] = latTot/16;
+    //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
+    max[2] = lmt[getArrPosition("2000-01-01")];
+    for(i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++){
+        if(max[2] < lmt[i]) max[2] = lmt[i];
     }
-    min = lmit[3000];
-    for(i = 0; i < 192; i++){
-        if(min > lmit[i+3000]) min = lmit[i+3000];
+    //checking the next temperature data entry and comparing to current max/min
+    min[2] = lmit[getArrPosition("2000-01-01")];
+    for(i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++){
+        if(min[2] > lmit[i]) min[2] = lmit[i];
     }
-    writeGNUPlot3(latAvg, max, min, "Century", "Average", "Max", "Min", "Question-9-fourthCentury.dat", 0);
+    //generating .dat file for gnuplot script
+    writeGNUPlot3(century, latavg, max, min, "Question-9.dat", 0);
+    writeColumns(3, "Question-9other.dat", 0, 4, century, latavg, max, min);
 }
 
 /**
@@ -802,26 +800,26 @@ void q9()
  */
 void q10()
 {
-    // Decalres variables for the x, y, and z values
-    int x_values[180];
+    // Declares variables for the x, y, and z values
+    int x_values[192];
+    double yvalues[192];
+    double zvalues[192];
 
-    // This loop will go through the 180 months of the year sounds the amount of months in 15 years
-    for (int i = 0; i < 180; i++)
+    // This loop will go through the 192 months of the year, the amount of months in 15 years
+    for (int i = 0; i < 192; i++)
     {
         x_values[i] = i + 1;
     }
-    double yvalues[180];
-    double zvalues[180];
 
-    // This loop goes through 180 months for 15 years getting the average land temperature and the uncertainty
-    for (int i = 0; i < 180; i++)
+    // This loop goes through 192 months for 15 years getting the average land temperature and the uncertainty
+    for (int i = 0; i < 192; i++)
     {
         yvalues[i] = lat[getArrPosition("2000-01-01") + i];
         zvalues[i] = latu[getArrPosition("2000-01-01") + i];
     }
 
-    // This write the amount of monts, average land temperature, and uncertainty to a file
-    writeGNUPlot2(x_values, yvalues, zvalues, "Month", "Monthly Average Land Temperature", "Uncertainty", 180, "Question-10.dat", 0);
+    // This write the amount of months, average land temperature, and uncertainty to a file
+    writeGNUPlot2(x_values, yvalues, zvalues, "Month", "Monthly Average Land Temperature", "Uncertainty", 192, "Question-10.dat", 0);
 }
 /**
  * Generate a GNUPlot data file and use GNUPlot to do a plot similar to what you
