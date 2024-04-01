@@ -864,34 +864,27 @@ void cleanup()
     }
 }
 
-// int main(void)
-// {
-//     cleanup();
-//     // remove("debug.txt");
-//     // Some updates here and there lololollolol
-//     // Call function to get data count
-//     setValuesFromFile();
-//     // Calculate the yearly averages
-//     computeYearlyAverage();
-//     q1();
-//     q2();
-//     q3();
-//     q4();
-//     q5();
-//     q6();
-//     q7();
-//     q8();
-//     q9();
-//     q10();
-//     q11();
-//     // int arrPos = getYearlyArrPosition(1850);
-//     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
-//     return 0;
-// }
-
-int main(void) {
+int main(void)
+{
     cleanup();
+    // remove("debug.txt");
+    // Some updates here and there lololollolol
+    // Call function to get data count
     setValuesFromFile();
+    // Calculate the yearly averages
     computeYearlyAverage();
+    q1();
+    q2();
+    q3();
     q4();
+    q5();
+    q6();
+    q7();
+    q8();
+    q9();
+    q10();
+    q11();
+    // int arrPos = getYearlyArrPosition(1850);
+    // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
+    return 0;
 }
