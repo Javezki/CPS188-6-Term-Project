@@ -1,5 +1,5 @@
 set terminal png
-set output 'Yearly Land and Ocean Averages.png'
+set output 'Question-11.png'
 set title "Yearly Land and Ocean Averages"
 set xlabel "Year"
 set ylabel "Temperatures"
