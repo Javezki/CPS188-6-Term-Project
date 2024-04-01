@@ -551,7 +551,6 @@ void q3()
         // This loops through the years between 1900 and 2015
         for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01"); j += 12)
         {
-
             sum += lat[i];
         }
 
@@ -584,8 +583,19 @@ void q3()
         case 7:
             printf("August ");
             break;
+        case 8:
+            printf("September ");
+            break;
+        case 9:
+            printf("October ");
+            break;
+        case 10:
+            printf("November ");
+            break;
+        case 11:
+            printf("December ");
+            break;
         }
-
         printf("%lf\n", (sum / 116));
     }
 }
