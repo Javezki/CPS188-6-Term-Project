@@ -230,6 +230,7 @@ int getArrPosition(char *date)
         printf("Error: Invalid date format\n");
         exit(1);
     }
+
     return (year - 1750) * 12 + month - 1;
 }
 
@@ -484,7 +485,7 @@ void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, 
 void q1()
 {
     // 10 is the year 1760
-    for (int i = 10; i <= NUM_YEARS; i++)
+    for (int i = getYearlyArrPosition(1760); i <= NUM_YEARS; i++)
     {
         printf("Year: %d, Average: %f\n", i + 1750, latYearlyAverage[i]);
     }
@@ -514,7 +515,7 @@ void q2()
         avg_temp_19th += lat[i];
     }
     // Print the average land temperature for the 19th century
-    printf("18th century average land temperature: %f\n", avg_temp_19th / 1200);
+    printf("19th century average land temperature: %f\n", avg_temp_19th / 1200);
 
     // 20th century (1900-1999)
     for (int i = getArrPosition("1900-01-01"); i < getArrPosition("1999-12-01"); i++)
@@ -522,7 +523,7 @@ void q2()
         avg_temp_20th += lat[i];
     }
     // Print the average land temperature for the 20th century
-    printf("18th century average land temperature: %f\n", avg_temp_20th / 1200);
+    printf("20th century average land temperature: %f\n", avg_temp_20th / 1200);
 
     // 21st century (2000-2015)
     for (int i = getArrPosition("2000-01-01"); i < getArrPosition("2015-12-01"); i++)
@@ -530,7 +531,7 @@ void q2()
         avg_temp_21th += lat[i];
     }
     // Print the average land temperature for the 21th century
-    printf("18th century average land temperature: %f\n", avg_temp_21th / 191);
+    printf("21st century average land temperature: %f\n", avg_temp_21th / 191);
 }
 
 /**
@@ -551,7 +552,7 @@ void q3()
         // This loops through the years between 1900 and 2015
         for (int j = getArrPosition("1900-01-01") + i; j < getArrPosition("2015-12-01"); j += 12)
         {
-            sum += lat[i];
+            sum += lat[j];
         }
 
         // This prints out the month average over the years of 1900 2015
@@ -895,3 +896,4 @@ int main(void)
     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
 }
+
