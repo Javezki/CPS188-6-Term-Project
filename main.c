@@ -727,7 +727,6 @@ void q8()
  */
 void q9()
 {
-    char headers[4][10] = {"Century", "Average", "Max", "Min"};
     int century[3] = {19, 20, 21};
     double latavg[3], max[3], min[3];
     double latTot = 0;
