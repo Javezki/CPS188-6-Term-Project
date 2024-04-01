@@ -327,7 +327,7 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
  * @param columns An array of arrays representing the data columns.
  * @param ... Optional additional columns to write.
  */
-void writeColumns(int size, char* fileName, int isAppended, int numColumns, char columnNames[][10], int xValues[], double columns[], ...)
+void writeColumns(int size, char* fileName, int isAppended, int numColumns, int xValues[], double columns[], ...)
 {
     FILE* file;
     switch (isAppended)
@@ -347,13 +347,7 @@ void writeColumns(int size, char* fileName, int isAppended, int numColumns, char
         perror("Failed to open file");
         return;
     }
-    fprintf(file, "# ");
-    for (int i = 0; i < numColumns; i++)
-    {
-        fprintf(file, "%s ", columnNames[i]);
-    }
-    fprintf(file, "\n");
-    
+
     va_list args;
     va_start(args, columns);
     double* allArrays[numColumns];
@@ -795,7 +789,7 @@ void q9()
     }
     //generating .dat file for gnuplot script
     writeGNUPlot3(century, latavg, max, min, "Question-9.dat", 0);
-    writeColumns(3, "Question-9other.dat", 0, 4, headers, century, latavg, max, min);
+    writeColumns(3, "Question-9other.dat", 0, 4, century, latavg, max, min);
 }
 
 /**
