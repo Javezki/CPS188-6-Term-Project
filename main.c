@@ -82,8 +82,7 @@ char fileNames[10][50] = {
     "Question-9.dat",
     "Question-10.dat",
     "Question-11-Land.dat",
-    "Question-11-Land and Ocean.dat"
-    };
+    "Question-11-Land and Ocean.dat"};
 void setValuesFromFile()
 {
     FILE *file;
@@ -272,7 +271,8 @@ void computeYearlyAverage()
 
 /**
  * Writes data to a file in GNUPlot format.
- *
+ * 
+ * @deprecated Use writeColumns() instead
  * @param xvalues An array of integers representing the x-values.
  * @param yvalues An array of doubles representing the y-values.
  * @param xName The name of the x-axis.
@@ -280,7 +280,7 @@ void computeYearlyAverage()
  * @param size The size of the arrays.
  * @param fileName The name of the file to write the data to.
  * @param isAppended A flag indicating whether to append to an existing file (1) or create a new file (0).
- * @deprecated Use writeColumns() instead
+
  */
 void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int size, char *fileName, int isAppended)
 {
@@ -327,20 +327,20 @@ void writeGNUPlot(int *xvalues, double *yvalues, char *xName, char *yName, int s
  * @param columns An array of arrays representing the data columns.
  * @param ... Optional additional columns to write.
  */
-void writeColumns(int size, char* fileName, int isAppended, int numColumns, int xValues[], double columns[], ...)
+void writeColumns(int size, char *fileName, int isAppended, int numColumns, int xValues[], double columns[], ...)
 {
-    FILE* file;
+    FILE *file;
     switch (isAppended)
     {
-        case 0:
-            file = fopen(fileName, "w");
-            break;
-        case 1:
-            file = fopen(fileName, "a");
-            break;
-        default:
-            perror("Invalid file mode");
-            return;
+    case 0:
+        file = fopen(fileName, "w");
+        break;
+    case 1:
+        file = fopen(fileName, "a");
+        break;
+    default:
+        perror("Invalid file mode");
+        return;
     }
     if (file == NULL)
     {
@@ -350,10 +350,11 @@ void writeColumns(int size, char* fileName, int isAppended, int numColumns, int 
 
     va_list args;
     va_start(args, columns);
-    double* allArrays[numColumns];
-    for (int i = 0; i < numColumns - 2; i++) {
-        
-        allArrays[i] = va_arg(args, double*);
+    double *allArrays[numColumns];
+    for (int i = 0; i < numColumns - 2; i++)
+    {
+
+        allArrays[i] = va_arg(args, double *);
     }
     va_end(args);
     for (int i = 0; i < size; i++)
@@ -368,109 +369,6 @@ void writeColumns(int size, char* fileName, int isAppended, int numColumns, int 
     }
     printf("File written: %s\n", fileName);
 }
-
-/**
- * @deprecated Why did we have this in the first place?
-*/
-void writeGNUPlot2(int *xvalues, double *yvalues, double *zvalues, char *xName, char *yName, char *zName, int size, char *fileName, int isAppended)
-{
-    FILE *file;
-    // printf("Testing xValues 0 %d\n", xvalues[0]);
-    // printf("Testing yValues 0 %lf\n", yvalues[0]);
-    // printf("Testing xValues 1 %d\n", xvalues[1]);
-    // printf("Testing yValues 1 %lf\n", yvalues[1]);
-    switch (isAppended)
-    {
-    case 0:
-        file = fopen(fileName, "w");
-        break;
-    case 1:
-        file = fopen(fileName, "a");
-        break;
-    default:
-        perror("Invalid file mode");
-        return;
-    }
-    fprintf(file, "# %s vs %s vs %s\n", xName, yName, zName);
-    if (file == NULL)
-    {
-        perror("Failed to open file");
-        return;
-    }
-    for (int i = 0; i < size; i++)
-    {
-        fprintf(file, "%d %lf %lf\n", xvalues[i], yvalues[i], zvalues[i]);
-    }
-    fclose(file);
-    printf("File written: %s\n", fileName);
-}
-
-void writeGNUPlot3(int *xvalues, double *yvalues, double *zvalues, double *avalues, char *fileName, int isAppended)
-{
-    FILE *file;
-    // printf("Testing xValues 0 %d\n", xvalues[0]);
-    // printf("Testing yValues 0 %lf\n", yvalues[0]);
-    // printf("Testing xValues 1 %d\n", xvalues[1]);
-    // printf("Testing yValues 1 %lf\n", yvalues[1]);
-    switch (isAppended)
-    {
-    case 0:
-        file = fopen(fileName, "w");
-        break;
-    case 1:
-        file = fopen(fileName, "a");
-        break;
-    default:
-        perror("Invalid file mode");
-        return;
-    }
-    if (file == NULL)
-    {
-        perror("Failed to open file");
-        return;
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        fprintf(file, "%d %lf %lf %lf\n", xvalues[i], yvalues[i], zvalues[i], avalues[i]);
-    }
-    fclose(file);
-    printf("File written: %s\n", fileName);
-}
-
-/**
- * Writes data points to a file in GNUPlot format.
- *
- * This function takes arrays of x and y values, along with their corresponding names,
- * and writes them to a file in GNUPlot format. The data points are written from the
- * startIndex to the endIndex (exclusive) in the arrays.
- *
- * @param xvalues    An array of integers representing the x values.
- * @param yvalues    An array of doubles representing the y values.
- * @param xName      The name of the x values.
- * @param yName      The name of the y values.
- * @param size       The size of the arrays.
- * @param fileName   The name of the file to write the data to.
- * @param startIndex The index to start writing from in the arrays.
- * @param endIndex   The index to stop writing at in the arrays (exclusive).
- */
-void writeGNUPlotIndex(int *xvalues, double *yvalues, char *xName, char *yName, int size, char *fileName, int startIndex, int endIndex)
-{
-    FILE *file;
-    file = fopen(fileName, "w");
-    if (file == NULL)
-    {
-        perror("Failed to open file");
-        return;
-    }
-    fprintf(file, "# %s vs %s\n", xName, yName);
-    for (int i = startIndex; i < endIndex; i++)
-    {
-        fprintf(file, "%d %lf\n", xvalues[i], yvalues[i]);
-    }
-    fclose(file);
-    printf("File written: %s\n", fileName);
-}
-
 /**
  * Based on the land average temperature column, calculate the yearly averages for each year
  * between 1760 and 2015 (the average of the twelve months of each year).
@@ -605,7 +503,6 @@ void q4()
     int hottestMonthPos = 0;
     int coldestMonthPos = 0;
 
-
     for (int i = 0; i < DATA_COUNT; i++)
     {
         if (lat[i] > lat[hottestMonthPos])
@@ -664,7 +561,7 @@ void q6()
         xvalues[i - 10] = i + 1750;
     }
     // Subtract 10 to avoid the last 10 years after 2015
-    writeGNUPlot(xvalues, latYearlyAverage, "Years 1760 - 2015", "Temperatures", NUM_YEARS - 9, "Question-6.dat", 0);
+    writeColumns(NUM_YEARS - 9, "Question-6.dat", 0, 2, xvalues, latYearlyAverage);
 }
 
 /**
@@ -683,8 +580,8 @@ void q7()
         yvalues[i] = latYearlyAverage[getYearlyArrPosition(1800 + i)];
         yvalues2[i] = latYearlyAverage[getYearlyArrPosition(1900 + i)];
     }
-    writeGNUPlot(xvalues, yvalues, "1800-1900", "Temps", 101, "Question-7-1800.dat", 0);
-    writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 101, "Question-7-1900.dat", 0);
+    writeColumns(101, "Question-7-1800.dat", 0, 2, xvalues, yvalues);
+    writeColumns(101, "Question-7-1900.dat", 0, 2, xvalues, yvalues2);
 }
 
 /**
@@ -713,9 +610,9 @@ void q8()
         //     adjustedLmtYearlyAverage[i - 1850],
         //     adjustedLmitYearlyAverage[i - 1850]);
     }
-    writeGNUPlot(xvalues, adjustedLatYearlyAverage, "Years 1850 - 2015", "Avg Temperatures", numYears, "Question-8-lat.dat", 0);
-    writeGNUPlot(xvalues, adjustedLmtYearlyAverage, "Years 1850 - 2015", "Max Temperatures", numYears, "Question-8-lmt.dat", 0);
-    writeGNUPlot(xvalues, adjustedLmitYearlyAverage, "Years 1850 - 2015", "Min Temperatures", numYears, "Question-8-lmit.dat", 0);
+    writeColumns(numYears, "Question-8-lat.dat", 0, 2, xvalues, adjustedLatYearlyAverage);
+    writeColumns(numYears, "Question-8-lmt.dat", 0, 2, xvalues, adjustedLmtYearlyAverage);
+    writeColumns(numYears, "Question-8-lmit.dat", 0, 2, xvalues, adjustedLmitYearlyAverage);
 }
 
 /**
@@ -732,63 +629,77 @@ void q9()
     double latTot = 0;
     int i;
 
-    //1800-1899
+    // 1800-1899
     latTot = 0;
-    //summing the yearly average temperatures for the 19th century, then finding the average
-    for(int i = getYearlyArrPosition(1800); i < getYearlyArrPosition(1900); i++){
+    // summing the yearly average temperatures for the 19th century, then finding the average
+    for (int i = getYearlyArrPosition(1800); i < getYearlyArrPosition(1900); i++)
+    {
         latTot += latYearlyAverage[i];
     }
-    latavg[0] = latTot/100;
-    //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
+    latavg[0] = latTot / 100;
+    // setting the first entry for land max/min temperatures as the highest/lowest value for comparison
     max[0] = lmt[getArrPosition("1850-01-01")];
-    //checking the next temperature data entry and comparing to current max/min
-    for(i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++){
-        if(max[0] < lmt[i]) max[0] = lmt[i];
+    // checking the next temperature data entry and comparing to current max/min
+    for (i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++)
+    {
+        if (max[0] < lmt[i])
+            max[0] = lmt[i];
     }
     min[0] = lmit[getArrPosition("1850-01-01")];
 
-    for(i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++){
-        if(min[0] > lmit[i]) min[0] = lmit[i];
+    for (i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++)
+    {
+        if (min[0] > lmit[i])
+            min[0] = lmit[i];
     }
 
-    //1900-1999
+    // 1900-1999
     latTot = 0;
-    //summing the yearly average temperatures for the 20th century, then finding the average
-    for(i = getYearlyArrPosition(1900); i < getYearlyArrPosition(2000); i++){
+    // summing the yearly average temperatures for the 20th century, then finding the average
+    for (i = getYearlyArrPosition(1900); i < getYearlyArrPosition(2000); i++)
+    {
         latTot += latYearlyAverage[i];
     }
-    latavg[1] = latTot/100;
-    //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
+    latavg[1] = latTot / 100;
+    // setting the first entry for land max/min temperatures as the highest/lowest value for comparison
     max[1] = lmt[getArrPosition("1900-01-01")];
-    for(i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++){
-        if(max[1] < lmt[i]) max[1] = lmt[i];
+    for (i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++)
+    {
+        if (max[1] < lmt[i])
+            max[1] = lmt[i];
     }
-    //checking the next temperature data entry and comparing to current max/min
+    // checking the next temperature data entry and comparing to current max/min
     min[1] = lmit[getArrPosition("1900-01-01")];
-    for(i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++){
-        if(min[1] > lmit[i]) min[1] = lmit[i];
+    for (i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++)
+    {
+        if (min[1] > lmit[i])
+            min[1] = lmit[i];
     }
 
-    //2000-2015
+    // 2000-2015
     latTot = 0;
-    //summing the yearly average temperatures for the 21st century, then finding the average
-    for(i = getYearlyArrPosition(2000); i <= getYearlyArrPosition(2015); i++){
+    // summing the yearly average temperatures for the 21st century, then finding the average
+    for (i = getYearlyArrPosition(2000); i <= getYearlyArrPosition(2015); i++)
+    {
         latTot += latYearlyAverage[i];
     }
-    latavg[2] = latTot/16;
-    //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
+    latavg[2] = latTot / 16;
+    // setting the first entry for land max/min temperatures as the highest/lowest value for comparison
     max[2] = lmt[getArrPosition("2000-01-01")];
-    for(i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++){
-        if(max[2] < lmt[i]) max[2] = lmt[i];
+    for (i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++)
+    {
+        if (max[2] < lmt[i])
+            max[2] = lmt[i];
     }
-    //checking the next temperature data entry and comparing to current max/min
+    // checking the next temperature data entry and comparing to current max/min
     min[2] = lmit[getArrPosition("2000-01-01")];
-    for(i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++){
-        if(min[2] > lmit[i]) min[2] = lmit[i];
+    for (i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++)
+    {
+        if (min[2] > lmit[i])
+            min[2] = lmit[i];
     }
-    //generating .dat file for gnuplot script
-    writeGNUPlot3(century, latavg, max, min, "Question-9.dat", 0);
-    writeColumns(3, "Question-9other.dat", 0, 4, century, latavg, max, min);
+    // generating .dat file for gnuplot script
+    writeColumns(3, "Question-9.dat", 0, 4, century, latavg, max, min);
 }
 
 /**
@@ -818,7 +729,7 @@ void q10()
     }
 
     // This write the amount of months, average land temperature, and uncertainty to a file
-    writeGNUPlot2(x_values, yvalues, zvalues, "Month", "Monthly Average Land Temperature", "Uncertainty", 192, "Question-10.dat", 0);
+    writeColumns(192, "Question-10.dat", 0, 3, x_values, yvalues, zvalues);
 }
 /**
  * Generate a GNUPlot data file and use GNUPlot to do a plot similar to what you
@@ -838,8 +749,8 @@ void q11()
         yvalues[i] = lmtYearlyAverage[i + 100];
         zvalues[i] = loatYearlyAverage[i + 100];
     }
-    writeGNUPlot(xvalues, yvalues, "Years", "Land Temperatures", 166, "Question-11-Land.dat", 0);
-    writeGNUPlot(xvalues, zvalues, "Years", "Land and Ocean Temperatures", 166, "Question-11-Land and Ocean.dat", 0);
+    writeColumns(166, "Question-11-Land.dat", 0, 2, xvalues, yvalues);
+    writeColumns(166, "Question-11-Land and Ocean.dat", 0, 2, xvalues, zvalues);
 }
 /**
  * @brief Cleans up files using the global array of file names.
@@ -880,4 +791,3 @@ int main(void)
     // printf("LAT 1850: %f, LMT 1850: %f, LMIT 1850: %f\n", latYearlyAverage[arrPos], lmtYearlyAverage[arrPos], lmitYearlyAverage[arrPos]);
     return 0;
 }
-
