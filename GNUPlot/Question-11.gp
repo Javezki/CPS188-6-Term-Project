@@ -3,7 +3,7 @@ set output 'Question-11.png'
 set title "Yearly Land and Ocean Averages"
 set xlabel "Year"
 set ylabel "Temperatures"
-set yrange [0: 20]
+set yrange [8: 17]
 set key box
 set key top right
 set key width 5
