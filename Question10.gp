@@ -1,6 +1,6 @@
 set terminal png
 set output 'Question-10.png'
-set title " Montly Tempeatures"
+set title " Monthly Temperatures"
 set xlabel "Months"
 set ylabel "Temperatures"
 set yrange [0: 20]
