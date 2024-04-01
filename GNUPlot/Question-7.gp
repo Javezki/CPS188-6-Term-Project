@@ -1,9 +1,9 @@
 set terminal png
-set output 'Average Land Temperatures.png'
+set output 'Question-7.png'
 set title "Average Land Temperatures"
 set xlabel "Years in the 18th and 19th centuries"
 set ylabel "Temperatures"
-set yrange [0: 10]
+set yrange [4: 10]
 set key box
 set key bottom right
 set key width 5

@@ -1,5 +1,5 @@
 set terminal png
-set output 'Land Temperatures.png'
+set output 'Question-8.png'
 set title "Land Temperatures"
 set xlabel "Year"
 set ylabel "Temperatures"
