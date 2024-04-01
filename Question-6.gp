@@ -1,11 +1,8 @@
-set terminal png
-set output 'Yearly Temperatures.png'
-set title " Yearly Temperatures"
-set xlabel "Years"
-set ylabel "Temperatures"
-set yrange [0: 10]
-set key box
-set key bottom right
-set key width 5
-set key width 4
+set terminal qt
+set title "Yearly Temperatures fom 1760 to 2015"
+set xlabel "Year"
+set ylabel "Temperature (Celsius)"
+set xrange [1750:2025]
+set yrange [2:11]
+set key top right
 plot "Question-6.dat" title "Yearly Temperatures" linetype 7 linecolor 2 with linespoints
