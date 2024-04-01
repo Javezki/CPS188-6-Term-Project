@@ -742,55 +742,56 @@ void q9()
     //1800-1899
     latTot = 0;
     //summing the yearly average temperatures for the 19th century, then finding the average
-    for(int i = 0; i < 100; i++){
-        latTot += latYearlyAverage[i+50];
+    for(int i = getYearlyArrPosition(1800); i < getYearlyArrPosition(1900); i++){
+        latTot += latYearlyAverage[i];
     }
     latavg[0] = latTot/100;
     //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
-    max[0] = lmt[600];
+    max[0] = lmt[getArrPosition("1850-01-01")];
     //checking the next temperature data entry and comparing to current max/min
-    for(i = 0; i < 1200; i++){
-        if(max[0] < lmt[i+600]) max[0] = lmt[i+600];
+    for(i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++){
+        if(max[0] < lmt[i]) max[0] = lmt[i];
     }
-    min[0] = lmit[600];
-    for(i = 0; i < 1200; i++){
-        if(min[0] > lmit[i+600]) min[0] = lmit[i+600];
+    min[0] = lmit[getArrPosition("1850-01-01")];
+
+    for(i = getArrPosition("1850-01-01"); i < getArrPosition("1900-01-01"); i++){
+        if(min[0] > lmit[i]) min[0] = lmit[i];
     }
 
     //1900-1999
     latTot = 0;
     //summing the yearly average temperatures for the 20th century, then finding the average
-    for(i = 0; i < 100; i++){
-        latTot += latYearlyAverage[i+150];
+    for(i = getYearlyArrPosition(1900); i < getYearlyArrPosition(2000); i++){
+        latTot += latYearlyAverage[i];
     }
     latavg[1] = latTot/100;
     //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
-    max[1] = lmt[1800];
-    for(i = 0; i < 1200; i++){
-        if(max[1] < lmt[i+1800]) max[1] = lmt[i+1800];
+    max[1] = lmt[getArrPosition("1900-01-01")];
+    for(i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++){
+        if(max[1] < lmt[i]) max[1] = lmt[i];
     }
     //checking the next temperature data entry and comparing to current max/min
-    min[1] = lmit[1800];
-    for(i = 0; i < 1200; i++){
-        if(min[1] > lmit[i+1800]) min[1] = lmit[i+1800];
+    min[1] = lmit[getArrPosition("1900-01-01")];
+    for(i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++){
+        if(min[1] > lmit[i]) min[1] = lmit[i];
     }
 
     //2000-2015
     latTot = 0;
     //summing the yearly average temperatures for the 21st century, then finding the average
-    for(i = 0; i < 16; i++){
-        latTot += latYearlyAverage[i+250];
+    for(i = getYearlyArrPosition(2000); i <= getYearlyArrPosition(2015); i++){
+        latTot += latYearlyAverage[i];
     }
     latavg[2] = latTot/16;
     //setting the first entry for land max/min temperatures as the highest/lowest value for comparison
-    max[2] = lmt[3000];
-    for(i = 0; i < 192; i++){
-        if(max[2] < lmt[i+3000]) max[2] = lmt[i+3000];
+    max[2] = lmt[getArrPosition("2000-01-01")];
+    for(i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++){
+        if(max[2] < lmt[i]) max[2] = lmt[i];
     }
     //checking the next temperature data entry and comparing to current max/min
-    min[2] = lmit[3000];
-    for(i = 0; i < 192; i++){
-        if(min[2] > lmit[i+3000]) min[2] = lmit[i+3000];
+    min[2] = lmit[getArrPosition("2000-01-01")];
+    for(i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++){
+        if(min[2] > lmit[i]) min[2] = lmit[i];
     }
     //generating .dat file for gnuplot script
     writeGNUPlot3(century, latavg, max, min, "Question-9.dat", 0);
