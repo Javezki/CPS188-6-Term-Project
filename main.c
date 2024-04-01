@@ -72,7 +72,7 @@ double *data[] = {
     loat};
 
 // Global array of file names
-char fileNames[10][50] = {
+char fileNames[13][50] = {
     "Question-6.dat",
     "Question-7-1800.dat",
     "Question-7-1900.dat",
@@ -82,7 +82,11 @@ char fileNames[10][50] = {
     "Question-9-firstCentury.dat",
     "Question-9-secondCentury.dat",
     "Question-9-thirdCentury.dat",
-    "Question-9-fourthCentury.dat"};
+    "Question-9-fourthCentury.dat",
+    "Question-10.dat",
+    "Question-11-Land.dat",
+    "Question-11-Land and Ocean.dat"
+    };
 void setValuesFromFile()
 {
     FILE *file;
