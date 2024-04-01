@@ -1,6 +1,6 @@
 set terminal png
 set output 'Yearly Temperatures.png'
-set title " Yearly Tempeatures"
+set title " Yearly Temperatures"
 set xlabel "Years"
 set ylabel "Temperatures"
 set yrange [0: 10]
