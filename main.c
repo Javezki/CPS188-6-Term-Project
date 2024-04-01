@@ -683,7 +683,6 @@ void q7()
         yvalues[i] = latYearlyAverage[getYearlyArrPosition(1800 + i)];
         yvalues2[i] = latYearlyAverage[getYearlyArrPosition(1900 + i)];
     }
-    writeColumns(101, "Question-7.dat", 0, 3, xvalues, yvalues);
     writeGNUPlot(xvalues, yvalues, "1800-1900", "Temps", 101, "Question-7-1800.dat", 0);
     writeGNUPlot(xvalues, yvalues2, "1900-2000", "Temps", 101, "Question-7-1900.dat", 0);
 }
