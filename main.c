@@ -7,7 +7,7 @@
 #define DATA_COUNT 3192
 #define NUM_YEARS 265 // 2015 - 1750
 
-// Accont's for header and skips over it
+// Accounts for header and skips over it
 int counter = -1;
 
 // Date
@@ -162,53 +162,6 @@ void setValuesFromFile()
         counter++;
     }
     fclose(file);
-}
-
-/**
- * This function uses fscanf to sort the values
- * Probably need to format the date using ints and storing the values overall is gonna be a huge hassle
- * but I can try getting this to work sometime later
- */
-void setValuesFromFile2()
-{
-    FILE *file;
-    file = fopen("GlobalTemperatures.csv", "r");
-    if (file == NULL)
-    {
-        perror("Failed to open file");
-        return;
-    }
-
-    while (fscanf(file, "%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf", dt[counter], &lat[counter], &latu[counter], &lmt[counter], &lmtu[counter], &lmit[counter], &lmitu[counter], &loat[counter], &loatu[counter]) != EOF)
-    {
-        // Skip header
-        if (counter == -1)
-        {
-            counter++;
-            continue;
-        }
-        dt[counter][DATE_SIZE - 1] = '\0'; // Null terminate the string
-        counter++;
-    }
-    fclose(file);
-}
-
-/**
- * Retrieves the position of an array based on a given date string.
- *
- * @param date The date string in the format "YYYY-MM-DD".`
- * @return The position in the array.
- */
-int getArrPosition(char *date)
-{
-    int year, month, day;
-    if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3)
-    {
-        printf("Error: Invalid date format\n");
-        exit(1);
-    }
-
-    return (year - 1750) * 12 + month - 1;
 }
 
 int getYearlyArrPosition(int year)
@@ -370,13 +323,11 @@ void q3()
     for (int i = 0; i < 12; i++)
     {
         sum = 0;
-
         // This loops through the years between 1900 and 2015
         for (int j = getArrPosition("1900-01-01") + i; j <= getArrPosition("2015-12-01"); j += 12)
         {
             sum += lat[j];
         }
-
         // This prints out the month average over the years of 1900 2015
         switch (i)
         {
@@ -423,11 +374,13 @@ void q3()
 
 void q4()
 {
+    //make first temperature compared some arbitrary value for comparison
     int hottestMonthPos = 0;
     int coldestMonthPos = 0;
-
     printf("\n");
     printf("[Question 4]\n");
+    //loop to check every value in the land average temperature array
+    //compare current value to current max/min value to see if there is a new max/min
     for (int i = 0; i < DATA_COUNT; i++)
     {
         if (lat[i] > lat[hottestMonthPos])
@@ -447,7 +400,6 @@ void q5()
 {
     int hottestYearPos = 0;
     int coldestYearPos = 0;
-
     printf("\n");
     printf("[Question 5]\n");
     // Use max and min double values to ensure the first
@@ -474,11 +426,12 @@ void q5()
 void q6()
 {
     int xvalues[NUM_YEARS];
+    //populates array with years from 1760 to 2015
+    // Subtract 10 to avoid the last 10 years after 2015
     for (int i = 10; i <= NUM_YEARS; i++)
     {
         xvalues[i - 10] = i + 1750;
     }
-    // Subtract 10 to avoid the last 10 years after 2015
     writeColumns(NUM_YEARS - 9, "Question-6.dat", 0, 2, xvalues, latYearlyAverage);
 }
 
@@ -487,6 +440,7 @@ void q7()
     int xvalues[101];
     double yvalues[101];
     double yvalues2[101];
+    //finds year land avg temperature corresponding to year number for both centuries
     for (int i = 0; i <= 100; i++)
     {
         xvalues[i] = i;
@@ -504,6 +458,7 @@ void q8()
     double adjustedLatYearlyAverage[numYears];
     double adjustedLmtYearlyAverage[numYears];
     double adjustedLmitYearlyAverage[numYears];
+    // storing relevant data from extracted data arrays into new arrays to be sent to writeColumns function
     for (int i = 1850; i <= 2015; i++)
     {
         xvalues[i - 1850] = i;
@@ -520,17 +475,16 @@ void q9()
 {
     int century[3] = {19, 20, 21};
     double latavg[3], max[3], min[3];
-    double latTot = 0;
+    double lattot = 0;
     int i = 0;
 
     // 1800-1899
-    latTot = 0;
     // summing the yearly average temperatures for the 19th century, then finding the average
     for (i = getYearlyArrPosition(1800); i < getYearlyArrPosition(1900); i++)
     {
-        latTot += latYearlyAverage[i];
+        lattot += latYearlyAverage[i];
     }
-    latavg[0] = latTot / 100;
+    latavg[0] = lattot / 100;
     // setting the first entry for land max/min temperatures as the highest/lowest value for comparison
     max[0] = lmt[getArrPosition("1850-01-01")];
     // checking the next temperature data entry and comparing to current max/min
@@ -547,13 +501,13 @@ void q9()
     }
 
     // 1900-1999
-    latTot = 0;
+    lattot = 0;
     // summing the yearly average temperatures for the 20th century, then finding the average
     for (i = getYearlyArrPosition(1900); i < getYearlyArrPosition(2000); i++)
     {
-        latTot += latYearlyAverage[i];
+        lattot += latYearlyAverage[i];
     }
-    latavg[1] = latTot / 100;
+    latavg[1] = lattot / 100;
     // setting the first entry for land max/min temperatures as the highest/lowest value for comparison
     max[1] = lmt[getArrPosition("1900-01-01")];
     for (i = getArrPosition("1900-01-01"); i < getArrPosition("2000-01-01"); i++)
@@ -570,13 +524,13 @@ void q9()
     }
 
     // 2000-2015
-    latTot = 0;
+    lattot = 0;
     // summing the yearly average temperatures for the 21st century, then finding the average
     for (i = getYearlyArrPosition(2000); i <= getYearlyArrPosition(2015); i++)
     {
-        latTot += latYearlyAverage[i];
+        lattot += latYearlyAverage[i];
     }
-    latavg[2] = latTot / 16;
+    latavg[2] = lattot / 16;
     // setting the first entry for land max/min temperatures as the highest/lowest value for comparison
     max[2] = lmt[getArrPosition("2000-01-01")];
     for (i = getArrPosition("2000-01-01"); i <= getArrPosition("2015-12-01"); i++)
@@ -624,13 +578,14 @@ void q11()
     int xvalues[166];
     double yvalues[166];
     double zvalues[166];
-
+    //places corresponding year, yearly land avg temp, and yearly land and ocean temp in arrays
     for (int i = 0; i < 166; i++)
     {
         xvalues[i] = i + 1850;
-        yvalues[i] = lmtYearlyAverage[i + 100];
+        yvalues[i] = latYearlyAverage[i + 100];
         zvalues[i] = loatYearlyAverage[i + 100];
     }
+    //two data files: one for land yearly avg temp, another for land and ocean yearly avg temp
     writeColumns(166, "Question-11-Land.dat", 0, 2, xvalues, yvalues);
     writeColumns(166, "Question-11-Land and Ocean.dat", 0, 2, xvalues, zvalues);
 }

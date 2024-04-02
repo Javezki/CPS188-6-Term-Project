@@ -1,5 +1,8 @@
-set terminal qt
-set title "Yearly Temperatures fom 1760 to 2015"
+reset
+set terminal qt size 640,480
+set title "Yearly Temperatures from 1760 to 2015"
+set xtics nomirror
+set ytics nomirror
 set xlabel "Year"
 set ylabel "Temperature (C)"
 set xrange [1750:2025]
