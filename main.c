@@ -164,53 +164,6 @@ void setValuesFromFile()
     fclose(file);
 }
 
-/**
- * This function uses fscanf to sort the values
- * Probably need to format the date using ints and storing the values overall is gonna be a huge hassle
- * but I can try getting this to work sometime later
- */
-void setValuesFromFile2()
-{
-    FILE *file;
-    file = fopen("GlobalTemperatures.csv", "r");
-    if (file == NULL)
-    {
-        perror("Failed to open file");
-        return;
-    }
-
-    while (fscanf(file, "%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf,%lf", dt[counter], &lat[counter], &latu[counter], &lmt[counter], &lmtu[counter], &lmit[counter], &lmitu[counter], &loat[counter], &loatu[counter]) != EOF)
-    {
-        // Skip header
-        if (counter == -1)
-        {
-            counter++;
-            continue;
-        }
-        dt[counter][DATE_SIZE - 1] = '\0'; // Null terminate the string
-        counter++;
-    }
-    fclose(file);
-}
-
-/**
- * Retrieves the position of an array based on a given date string.
- *
- * @param date The date string in the format "YYYY-MM-DD".`
- * @return The position in the array.
- */
-int getArrPosition(char *date)
-{
-    int year, month, day;
-    if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3)
-    {
-        printf("Error: Invalid date format\n");
-        exit(1);
-    }
-
-    return (year - 1750) * 12 + month - 1;
-}
-
 int getYearlyArrPosition(int year)
 {
     return year - 1750;
