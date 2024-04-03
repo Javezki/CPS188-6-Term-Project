@@ -164,6 +164,24 @@ void setValuesFromFile()
     fclose(file);
 }
 
+/**
+ * Retrieves the position of an array based on a given date string.
+ *
+ * @param date The date string in the format "YYYY-MM-DD".`
+ * @return The position in the array.
+ */
+int getArrPosition(char *date)
+{
+    int year, month, day;
+    if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3)
+    {
+        printf("Error: Invalid date format\n");
+        exit(1);
+    }
+
+    return (year - 1750) * 12 + month - 1;
+}
+
 int getYearlyArrPosition(int year)
 {
     return year - 1750;
@@ -258,6 +276,9 @@ void writeColumns(int size, char *fileName, int isAppended, int numColumns, int 
     }
 }
 
+/*Based on the land average temperature column, calculate the yearly averages for
+each year between 1760 and 2015 (the average of the twelve months of each year).
+One average per year. Ignore the years 1750-1759.*/
 void q1()
 {
     printf("\n[Question 1]\n");
@@ -271,6 +292,10 @@ void q1()
     printf("\n");
 }
 
+/*Based on the land average temperature column, calculate the average land
+temperature for the different centuries: 18th century (1760-1799), 19th century
+(1800-1899), 20th century (1900-1999) and 21st century (2000-2015). One
+average per century.*/
 void q2()
 {
     double avg_temp_18th = 0, avg_temp_19th = 0, avg_temp_20th = 0, avg_temp_21th = 0;
@@ -311,6 +336,9 @@ void q2()
     printf("\n");
 }
 
+/*Based on the land average temperature column, calculate the monthly averages
+for each month for all years combined between 1900 and 2015. A total of twelve
+averages. One average per month.*/
 void q3()
 {
     // Declaring the variables sum and month
@@ -372,6 +400,9 @@ void q3()
     }
 }
 
+/*Based on the land average temperature column, what was the hottest month
+recorded and what was the coldest month recorded (month and year in each
+case). In case of a tie, mention only one (doesn't matter which one).*/
 void q4()
 {
     //make first temperature compared some arbitrary value for comparison
@@ -396,6 +427,8 @@ void q4()
     printf("Coldest month: %s, Temperature (C): %f\n", dt[coldestMonthPos], lat[coldestMonthPos]);
 }
 
+/*Based on your answer in question 1, what year was the hottest and what year was
+the coldest?*/
 void q5()
 {
     int hottestYearPos = 0;
@@ -423,6 +456,9 @@ void q5()
     printf("Coldest year: %d, Temperature (C): %f\n\n", coldestYearPos + 1750, coldestYear);
 }
 
+/*Based on your answer in question 1, generate a GNUPlot data file and use
+GNUPlot to make a graph (line plot) of the yearly temperatures for the years
+1760 to 2015. Label the axes clearly and add a title and legend to your graph.*/
 void q6()
 {
     int xvalues[NUM_YEARS];
@@ -435,6 +471,11 @@ void q6()
     writeColumns(NUM_YEARS - 9, "Question-6.dat", 0, 2, xvalues, latYearlyAverage);
 }
 
+/*Generate a GNUPlot data file and use GNUPlot to make a graph (line plots) of
+the average land temperatures for the 19th and 20th centuries. Put both lines on
+the same figure. Ensure that you have the same x-axis scale (for example 1852 and
+1952 would both have an x-value of 52). Have your two line plots with different
+colours. Label the axes clearly and add a title and legend to your graph.*/
 void q7()
 {
     int xvalues[101];
@@ -451,6 +492,14 @@ void q7()
     writeColumns(101, "Question-7-1900.dat", 0, 2, xvalues, yvalues2);
 }
 
+/*Using the columns LandAverageTemperature, LandMaxTemperature and
+LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make
+line plots that show all three temperatures on the same figure. Use the years for
+the x-axis (use only the years between 1850 and 2015) and the yearly averages for
+the y-axis. Use three different colours (or different line styles) for the three lines.
+Make sure that the line plotting LandAverageTemperature stands out from the
+other two (ex: make that line thicker). Make sure your graph has a title, axes labels
+and a legend that explicitly tells which line is which.*/
 void q8()
 {
     int numYears = 2015 - 1850 + 1;
@@ -471,6 +520,13 @@ void q8()
     writeColumns(numYears, "Question-8-lmit.dat", 0, 2, xvalues, adjustedLmitYearlyAverage);
 }
 
+/*Using the columns LandAverageTemperature, LandMaxTemperature and
+LandMinTemperature, generate a GNUPlot data file and use GNUPlot to make
+3 bar plots (box or histogram plots) that show the average, low and high
+temperatures for each of the 19th (after 1850), 20th and 21st centuries. Put all 3
+plots on the same figure displayed as subplots (multiplots). Each plot will show
+the boxes with different colours (one colour per century). Have a title to your
+figure and have the low or average or high as the title on each subplot.*/
 void q9()
 {
     int century[3] = {19, 20, 21};
@@ -549,6 +605,9 @@ void q9()
     writeColumns(3, "Question-9.dat", 0, 4, century, latavg, max, min);
 }
 
+/*For the years 2000 to 2015, generate a GNUPlot data file and use GNUPlot to
+make an error bar plot of the average land temperature by month. Use the
+uncertainty column for land temperatures to draw the error bars.*/
 void q10()
 {
     // Declares variables for the x, y, and z values
@@ -573,6 +632,11 @@ void q10()
     writeColumns(192, "Question-10.dat", 0, 3, x_values, yvalues, zvalues);
 }
 
+/*Generate a GNUPlot data file and use GNUPlot to do a plot similar to what you
+did in question 6 (LandAverageTemperature) but only for the years 1850 to 2015
+and add the data for the LandAndOceanAverageTemperatures column. Have the
+two lines on the same figure. Label the axes clearly and add a title and legend to
+your graph.*/
 void q11()
 {
     int xvalues[166];
